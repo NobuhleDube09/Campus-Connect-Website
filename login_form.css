@@ -1,0 +1,144 @@
+/* Modal background overlay */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+  z-index: 1000;
+}
+
+/* Modal card */
+.modal-box {
+  background: #fff;
+  padding: 35px;
+  border-radius: 12px;
+  width: 360px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  animation: slideDown 0.4s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Heading */
+.modal-box h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #004d61; /* matches your header/nav tone */
+}
+
+/* Close button */
+.btn-close {
+  position: absolute;
+  top: 12px; right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s ease;
+}
+.btn-close:hover { color: #000; }
+
+/* Choice buttons */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.btn-teal, .btn-orange {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-teal { background: #20c997; color: white; }
+.btn-orange { background: #ff8c42; color: white; }
+
+.btn-teal:hover { background: #17a589; transform: translateY(-2px); }
+.btn-orange:hover { background: #e6732f; transform: translateY(-2px); }
+
+/* Login form */
+.login-form {
+  text-align: left;
+}
+
+.login-form label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 18px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-form input:focus {
+  border-color: #20c997;
+  box-shadow: 0 0 6px rgba(32, 201, 151, 0.4);
+  outline: none;
+}
+
+/* Submit button inside form */
+.login-form button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-form .btn-teal { background: #20c997; color: white; }
+.login-form .btn-orange { background: #ff8c42; color: white; }
+
+.login-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+/* Signup link */
+.signup-link {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.signup-link a {
+  color: #ff8c42;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
