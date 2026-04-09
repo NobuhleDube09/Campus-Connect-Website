@@ -6,7 +6,9 @@
     <title>Campus Connect</title>
      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="style.css">
+     <link href="style.css" rel="stylesheet">
+     
+     <script src="chat-box.js"></script>
 </head>
 <body>
 
@@ -19,15 +21,27 @@
         <nav class="nav-links">
             <a href="#" class="active">Home</a>
             <a href="#" onclick="showAlert('About')">About</a>
-            <a href="#" onclick="showAlert('How It Works')">How It Works</a>
+            <a href="#" onclick="toggleChat()">How It Works</a>
             <a href="#" onclick="showAlert('Contact')">Contact</a>
         </nav>
+
+        <div id="chatbot" class="chatbot">
+            <div class="chat-header">Chat assistant</div>
+             <dic class="chat-body" id="chat-body">
+                <p>Hello! Ask me how it works</p>
+             </dic>
+           <form onsubmit="sendMessage(event)">
+              <input type="text" id="chat-input" placeholder="Type a message...">
+              <button type="submit">Send</button>
+           </form>
+        </div>
     
         <div class="auth-buttons">
             <button class="btn-login" onclick="showAlert('Login')">Login</button>
             <button class="btn-signup" onclick="window.location.href='seeker.html'">Sign Up</button>
 
         </div>
+        
     </header>
 
     <section class="hero">
