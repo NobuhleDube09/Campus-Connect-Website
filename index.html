@@ -17,10 +17,15 @@
         <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
         <nav class="nav-links">
-            <a href="#" class="active">Home</a>
-            <a href="#" onclick="showAlert('About')">About</a>
-            <a href="#" onclick="showAlert('How It Works')">How It Works</a>
-            <a href="#" onclick="showAlert('Contact')">Contact</a>
+           <a href="index.html" class="active">Home</a>
+           <a href="about.html">About</a>
+           <a href="how.html">How It Works</a>
+           <a href="contact.html">Contact</a>
+           <a href="findservices.html">Find Services</a>
+        </nav>
+
+            
+
         </nav>
     
         <div class="auth-buttons">
@@ -36,7 +41,8 @@
             <span style="color: orange;">Income</span>!
         </h1>
         <p>Discover And Promote Student Skills On Campus</p>
-        <button class="btn-teal" onclick="showAlert('Find Services')">Find Services</button>
+        <button class="btn-teal" onclick="window.location.href='findservices.html'">Find Services</button>
+
         <button class="btn-orange" onclick="showAlert('Start Your Hustle')">Start Your Hustle</button>
 
 </section>
@@ -56,8 +62,7 @@
     </div>
   </section>
 
-  <section class="services">
-    <h2>Popular Services on Campus</h2>
+    
     <p>Explore what's trending</p>
     <div class="cards">
       <div class="card tutoring">
@@ -97,6 +102,7 @@
   </div>
   </section>
   <form class="signup-form" onsubmit="return validateSignupUser(event)">
+  <form class="findServices" onsubmit="return validateSignupUser(event)"></form>
 
   <script src="main.js"></script>
 
