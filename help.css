@@ -25,3 +25,9 @@ body {
   margin-top: 10px;
   color: #555;
 }
+h1{ background: linear-gradient(to right, #00cc7e, #00d9ff);
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;}
