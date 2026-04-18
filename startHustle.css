@@ -87,7 +87,10 @@ form {
     border-radius: 8px;
     box-shadow: 0 2px 8px orange;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 /* back-link*/
 .back-link {
   display: inline-block;
@@ -179,6 +182,10 @@ label {
     border-color: #3498db;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 input[type="text"],
 textarea,
 select {
@@ -211,8 +218,11 @@ textarea {
 .tags-container {
     display: flex;
     gap: 10px;
+<<<<<<< HEAD
     flex-wrap: wrap;
     align-items: center;
+=======
+>>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 }
 
 .tags-container button {
@@ -223,9 +233,14 @@ textarea {
     border-radius: 4px;
     cursor: pointer;
 }
+<<<<<<< HEAD
 
 .tags-container button:hover {
     background: orange;
+=======
+.tags-container button:hover {
+  background: orange;
+>>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 }
 
 .publish-btn {
@@ -242,6 +257,10 @@ textarea {
     font-weight: bold;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 .publish-btn:hover {
     background: orange;
 }
@@ -255,6 +274,7 @@ textarea {
     font-weight: bold;
 }
 
+<<<<<<< HEAD
 /* ===== MESSAGE BOX STYLES ===== */
 .message-box {
     position: fixed;
@@ -372,6 +392,9 @@ textarea {
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
+=======
+/* Responsive */
+>>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 @media (max-width: 768px) {
     .nav-links {
         display: none;
@@ -384,6 +407,7 @@ textarea {
         padding: 10px;
     }
 
+<<<<<<< HEAD
     .nav-links.active {
         display: flex;
     }
@@ -409,3 +433,9 @@ textarea {
         padding: 20px;
     }
 }
+=======
+    .menu-toggle {
+        display: block;
+    }
+}
+>>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
