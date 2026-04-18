@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Campus Connect · Student Dashboard</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="providerDashboard.css">
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="left-section">
+        <!-- Classic hamburger icon: three stacked lines = universal hide-navigation symbol -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <div class="logo">Campus Connect</div>
+    </div>
+    <div class="profile-circle" id="profileCircleBtn">
+        <div class="default-avatar" id="avatarPreviewText">👤</div>
+        <img id="avatarImage" style="display: none; width: 100%; height: 100%; object-fit: cover;" alt="profile">
+    </div>
+</div>
+
+<!-- HIDDEN DRAWER (navigation menu that appears when clicking hamburger, saves screen space) -->
+<div class="drawer-overlay" id="drawerOverlay">
+    <div class="drawer" id="drawer">
+        <div class="drawer-header">
+            <i class="fas fa-bars"></i> Navigation
+        </div>
+        <div class="drawer-nav-item"><i class="fas fa-home"></i> Dashboard</div>
+        <div class="drawer-nav-item"><i class="fas fa-calendar-alt"></i> My Bookings</div>
+        <div class="drawer-nav-item"><i class="fas fa-heart"></i> Favorites</div>
+        <div class="drawer-nav-item"><i class="fas fa-chart-line"></i> Progress</div>
+        <div class="drawer-nav-item"><i class="fas fa-cog"></i> Settings</div>
+        <div class="drawer-nav-item"><i class="fas fa-question-circle"></i> Help & Support</div>
+    </div>
+</div>
+
+<!-- PROFILE MODAL (edit picture, name, email, change password) -->
+<div class="modal" id="profileModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+        </div>
+
+        <!-- Profile Picture Upload (circle) -->
+        <div class="avatar-upload">
+            <div class="avatar-large" id="avatarLargeContainer">
+                <div class="avatar-placeholder" id="largeAvatarPlaceholder">👤</div>
+                <img id="largeAvatarImg" style="display: none; width: 100%; height: 100%; object-fit: cover;" alt="profile preview">
+            </div>
+            <button class="upload-btn-small" id="uploadPicBtn">📸 Upload Picture</button>
+            <input type="file" id="profilePicInput" accept="image/jpeg, image/png, image/jpg" style="display: none;">
+            <div style="font-size: 0.7rem; color:#7f8c8d; margin-top: 6px;">Click the image or button to change</div>
+        </div>
+
+        <!-- Editable Full Name -->
+        <div class="input-group">
+            <label>Full Name</label>
+            <div class="inline-edit">
+                <input type="text" id="fullNameInput" class="input-field" value="Sobuhle Lolou">
+                <button class="edit-icon" id="editNameIcon" title="Save name">💾</button>
+            </div>
+        </div>
+
+        <!-- Editable Email -->
+        <div class="input-group">
+            <label>Email Address</label>
+            <div class="inline-edit">
+                <input type="email" id="emailInput" class="input-field" value="lolouhle09@campusconnect.com">
+                <button class="edit-icon" id="editEmailIcon" title="Save email">💾</button>
+            </div>
+        </div>
+
+        <!-- Change Password Section -->
+        <div class="password-section">
+            <label style="font-weight: 600;"><i class="fas fa-lock"></i> Change Password</label>
+            <button class="change-pw-btn" id="changePwBtn">Change Password</button>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-cancel" id="cancelModalBtn">Cancel</button>
+            <button class="btn-save" id="saveAllBtn">Save All Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Password Change Sub-Modal -->
+<div class="modal" id="passwordModal" style="z-index: 350;">
+    <div class="modal-card" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3><i class="fas fa-key"></i> Change Password</h3>
+            <button class="close-modal" id="closePwModalBtn">&times;</button>
+        </div>
+        <div class="input-group">
+            <label>Current Password</label>
+            <input type="password" id="currentPassword" class="input-field" placeholder="Enter current password">
+        </div>
+        <div class="input-group">
+            <label>New Password</label>
+            <input type="password" id="newPassword" class="input-field" placeholder="New password (min 6 chars)">
+        </div>
+        <div class="input-group">
+            <label>Confirm New Password</label>
+            <input type="password" id="confirmPassword" class="input-field" placeholder="Confirm new password">
+        </div>
+        <div class="action-buttons">
+            <button class="btn-cancel" id="cancelPwBtn">Cancel</button>
+            <button class="btn-save" id="submitPwBtn">Update Password</button>
+        </div>
+    </div>
+</div>
+
+
+  <div class="dashboard-grid">
+    <!-- LEFT MAIN COLUMN -->
+    <div class="main-area">
+      <!-- stats row: Bookings + My Services -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">📅 Bookings</div>
+          <div class="stat-number" id="bookingsCount">3</div>
+          <div class="stat-sub">upcoming</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">🛠️ My Services</div>
+          <div class="stat-number" id="servicesCount">2</div>
+          <div class="stat-sub">active</div>
+        </div>
+      </div>
+
+      <!-- Progress Tracker -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <h3>📈 Progress Tracker</h3>
+          <span class="progress-percent" id="progressPercent">65%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-fill" id="progressFill" style="width: 65%;"></div>
+        </div>
+        <div class="progress-message" id="progressMessage">
+          🎯 You’re on track with your goals!
+        </div>
+      </div>
+
+      <!-- Quick Actions (main area) -->
+      <div class="actions-card">
+        <div class="actions-title">⚡ Quick Actions</div>
+        <div class="action-buttons">
+          <button class="action-btn" id="addServiceBtn" onclick="window.location.href='startHustle.html'">➕ Add New Service</button>
+          <button class="action-btn" id="viewBookingsBtn">📋 View Bookings</button>
+          <button class="action-btn" id="checkNotifBtn">🔔 Check Notifications</button>
+        </div>
+      </div>
+
+      <!-- Logout button -->
+      <div class="logout-wrapper">
+        <button class="action-btn logout-btn" id="logoutBtn">🚪 Logout</button>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar-right">
+      <!-- Notifications card -->
+      <div class="notif-card">
+        <div class="notif-header">
+          <h3>🔔 Notifications</h3>
+          <span class="notif-badge" id="notifBadge">5 new</span>
+        </div>
+        <div id="notificationsList">
+          <div class="notif-item">
+            <p>📘 New booking request: Math tutoring (tomorrow)</p>
+            <div class="notif-time">2 hours ago</div>
+          </div>
+          <div class="notif-item">
+            <p>⭐ Your service "Group Study" got 5 stars!</p>
+            <div class="notif-time">Yesterday</div>
+          </div>
+          <div class="notif-item">
+            <p>🗓️ Upcoming booking reminder: Resume review at 3pm</p>
+            <div class="notif-time">5 hrs ago</div>
+          </div>
+          <div class="notif-item">
+            <p>💬 Message from Alex: "Can we reschedule?"</p>
+            <div class="notif-time">1 day ago</div>
+          </div>
+          <div class="notif-item">
+            <p>🏆 Campus connect weekly leaderboard: you're #7!</p>
+            <div class="notif-time">2 days ago</div>
+          </div>
+        </div>
+        <div style="margin-top: 0.7rem; font-size: 0.7rem; text-align: right;">
+          <span style="color:#2c7da0;">✨ 5 unread</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions (sidebar version) -->
+      <div class="sidebar-actions">
+        <div class="actions-title" style="margin-bottom: 0.8rem;">⚡ Quick Actions</div>
+        <div class="action-buttons">
+          <button class="action-btn sidebar-action-btn" id="sidebarAddService">➕ Add New Service</button>
+          <button class="action-btn sidebar-action-btn" id="sidebarViewBookings">📋 View Bookings</button>
+          <button class="action-btn sidebar-action-btn" id="sidebarCheckNotif">🔔 Check Notifications</button>
+        </div>
+      </div>
+
+      <!-- Campus Tips -->
+      <div class="tips-card">
+        <h4>💡 Campus Tips</h4>
+        <ul class="tips-list">
+          <li>Update your profile to attract more peers.</li>
+          <li>Respond quickly to booking requests.</li>
+          <li>Use study resources for exam prep.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <span>📍 Campus Connect • stay connected, share skills</span>
+  </footer>
+</div>
+<script src="providerDashboard.js"></script>
+</body>
+</html>
