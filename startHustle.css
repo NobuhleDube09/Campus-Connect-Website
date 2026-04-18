@@ -1,0 +1,272 @@
+/* Reset some defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    
+}
+
+body {
+    background: #f9f9f9;
+    color: teal;
+    line-height: 1.6;
+    padding: 0;
+    margin: 0;
+    background-image: url(background.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    backdrop-filter: blur(4px);
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: teal;
+    color: rgb(2, 74, 74);
+    padding: 15px 30px;
+}
+
+header .logo h1 {
+    font-size: 1.5rem;
+    font-style: italic;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: rgb(2, 74, 74);
+    cursor: pointer;
+    display: none; /* show only on mobile */
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: rgb(2, 74, 74);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-links a.active {
+    border-bottom: 2px solid orange;
+}
+
+.auth-buttons button {
+    margin-left: 10px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.btn-login {
+    background: rgb(2, 74, 74);
+    color: #fff;
+}
+
+.btn-signup {
+    background: orange;
+    color: #fff;
+}
+
+/* Form */
+form {
+    max-width: 700px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px orange;
+}
+/* back-link*/
+.back-link {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ff6600; /* orange tone to match your theme */
+  text-decoration: none;
+  margin: 10px 0;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.back-link:hover {
+  color: #cc5200; /* darker orange on hover */
+  transform: translateX(-3px); /* subtle left shift for effect */
+}
+
+.back-link:active {
+  color: #993d00; /* even darker when clicked */
+}
+
+form h1 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: bold;
+}
+
+/* Cover Image Upload Box */
+.upload-box {
+    border: 2px dashed teal;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    background: #fdfdfd;
+    color: teal;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.upload-box:hover {
+    border-color: orange;
+    background: #f0f8ff;
+    color: teal;
+}
+
+/* Portfolio Gallery */
+.portfolio-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    border: 2px dashed teal;
+    border-radius: 8px;
+    padding: 20px;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.portfolio-gallery span {
+    flex: 1 1 100%;
+    text-align: center;
+    color: teal;
+    font-weight: bold;
+}
+
+.portfolio-gallery:hover {
+    border-color: orange;
+    background: #f0fff5;
+    color: teal;
+}
+
+/* Portfolio Gallery Items (when images are added) */
+.portfolio-gallery img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    transition: transform 0.2s ease;
+}
+
+.portfolio-gallery img:hover {
+    transform: scale(1.05);
+    border-color: #3498db;
+}
+
+
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.upload-box,
+.portfolio-gallery {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 6px;
+    background: #fafafa;
+}
+
+.price-group {
+    display: flex;
+    gap: 10px;
+}
+
+.tags-container {
+    display: flex;
+    gap: 10px;
+}
+
+.tags-container button {
+    padding: 8px 12px;
+    background: teal;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.tags-container button:hover {
+  background: orange;
+}
+
+.publish-btn {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: teal;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.publish-btn:hover {
+    background: orange;
+}
+
+/* Back link */
+.back-link {
+    display: inline-block;
+    margin-bottom: 15px;
+    text-decoration: none;
+    color: orange;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background: #2c3e50;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 200px;
+        padding: 10px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}

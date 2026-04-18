@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Your Hustle</title>
+    <link rel="stylesheet" href="startHustle.css">
+</head>
+<body>
+     
+    <header>
+        <div class="logo">
+            <h1><i>Campus Connect</i></h1>
+        </div>
+        <button type="button" class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+        <nav class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#" onclick="showAlert('About')">About</a>
+            <a href="#" onclick="showAlert('How It Works')">How It Works</a>
+            <a href="#" onclick="showAlert('Contact')">Contact</a>
+        </nav>
+    
+        <div class="auth-buttons">
+            <button type="button" class="btn-login" onclick="showAlert('Login')">Login</button>
+            <button type="button" class="btn-signup" onclick="showAlert('Sign Up')">Sign Up</button>
+        </div>
+    </header>
+
+    <form>
+        <a href="#" class="back-link" onclick="history.back(); return false;">← Back</a>
+
+        <h1>List Your Service</h1>
+
+        <label for="coverImage">Cover Image*</label>
+        <div class="upload-box" id="coverImage">
+            <span>Click to upload cover image</span>
+        </div>
+
+        <label for="title">Title *</label>
+        <input type="text" id="title" name="title" placeholder="Enter your service title">
+
+        <label for="subtitle">Subtitle *</label>
+        <input type="text" id="subtitle" name="subtitle" placeholder="e.g., web tutoring">
+
+        <label for="description">Description *</label>
+        <textarea id="description" name="description" placeholder="Describe your service in detail..."></textarea>
+
+        <label for="category">Category *</label>
+        <select id="category" name="category">
+            <option value="tutoring">Tutoring</option>
+            <option value="mentoring">Mentoring</option>
+            <option value="coaching">Coaching</option>
+        </select>
+
+        <label for="status">Status</label>
+        <select id="status" name="status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+
+        <label for="price">Price (ZAR) *</label>
+        <div class="price-group">
+            <input type="text" id="price" name="price" placeholder="e.g., 25">
+            <select name="priceType">
+                <option value="/hr">/hr</option>
+                <option value="/session">/session</option>
+                <option value="/month">/month</option>
+            </select>
+        </div>
+
+        <label for="campus">Campus</label>
+        <input type="text" id="campus" name="campus" placeholder="e.g., UJ APB Campus">
+
+        <label for="availability">Availability</label>
+        <input type="text" id="availability" name="availability" placeholder="e.g., Mon-Fri, 3-7 PM">
+
+        <label for="tags">Tags</label>
+        <div class="tags-container">
+            <input type="text" id="tags" name="tags" placeholder="Add a tag...">
+            <button type="button">+</button>
+        </div>
+
+        <label for="portfolio">Portfolio Gallery</label>
+        <div class="portfolio-gallery" id="portfolio">
+            <span>+ Add images</span>
+        </div>
+
+        <button type="submit" class="publish-btn">Publish Service</button>
+    </form>
+
+    <script src="startHustle.js"></script>
+    <script src="findServices.js"></script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+CSS
+
+ body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f6f8;
+      color: #333;
+    }
+header {
+    background: linear-gradient(to right, #00cc7e44, #00d9ff); 
+    color: teal;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: white;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background-color: orange; 
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;               
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-login {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-signup {
+  background-color: orange;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+@media (max-width: 768px) {
+    .nav-links, .auth-buttons {
+    display: none; 
+    flex-direction: column;
+    background-color: rgba(0, 128, 128, 0.95);
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    padding: 20px;
+    border-radius: 8px;
+}
+    .nav-links.show, .auth-buttons.show {
+    display: flex; 
+    }
+    .menu-toggle {
+    display: block; 
+    }
+    header {
+    position: relative;
+    }
+}
+.hero {
+    min-height: 85vh; 
+    padding: 40px 20px;
+    background: /*linear-gradient(to right, rgba(0,81,128,0.7), rgba(59,130,246,0.7)),*/
+              url(background.png) no-repeat center center;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+}
+.hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-style: italic;   
+    font-weight: 700;     
+    font-size: 48px;      
+    margin-bottom: 20px;
+}
+.hero p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+}
+.hero button {
+    margin: 10px;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn-teal {
+    background-color: teal;
+    color: white;
+}
+.btn-orange {
+    background-color: #f97316;
+    color: white;
+}
+    .features {
+        display: flex;
+        justify-content: space-around;
+        padding: 20px;
+        margin-bottom: 15px;
+        background-color: white;
+    }
+    .feature {
+        text-align: center;
+        max-width: 800px;
+        background-color: white;   
+        border: 3px solid teal;    
+        border-radius: 8px;        
+        padding: 8px;
+        margin: 10px;
+    }
+    .feature h3 {
+        margin-top: 10px;
+        font-size: 18px;
+        color: teal; 
+    }
+    .services {
+      padding: 20px;
+      text-align: center;
+      margin-top: 0px;
+      background-color: #f4f8f885;
+    }
+    .services h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    .card {
+      width: 210px;
+        height: 150px;               
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        padding: 20px;
+        color: white;                 
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;    
+        background-size: cover;
+        background-position: center;
+    }
+    .tutoring {
+        background-image: url('https://images.squarespace-cdn.com/content/v1/5cd9c98b0490791c5de0b3ae/1585198015819-1GIW0KQA2TQ4DMI0MZQK/Smart+Schools+Adult+High+School+Diploma+Program+School+Counselors'); /* students studying */
+    }
+    .photography {
+        background-image: url('https://storage.googleapis.com/photographyfan/img/photography-genres.jpg'); 
+    }
+    .design {
+        background-image: url('https://www.unite.ai/wp-content/uploads/2023/05/AI-Graphic-design-tools-1000x600.png'); 
+    }
+
+    .beauty {
+    background-image: url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9');
+    }
+    .card h4 {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+    .footer-banner {
+      background: linear-gradient(to right, rgba(0, 128, 128, 0.863), #0092ccd8);
+      color: white;
+      /*background: url('https://as1.ftcdn.net/v2/jpg/03/57/95/66/1000_F_357956610_wTkwmSsOWHu8e8pl6boagYfbEv0t7OSt.jpg') 
+              no-repeat center center;*/
+      text-align: center;
+      padding: 15px 10px;;
+      /*margin-top: 20px;*/
+    }
+
+    .footer-banner h2 {
+  font-size: 22px;      
+  margin-bottom: 5px;
+}
+
+.footer-banner p {
+  font-size: 14px;      
+  margin-bottom: 10px;
+}
+
+    .footer-banner button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #22c55e;
+      color: white;
+    }
+
+    .footer-contact {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  flex-wrap: wrap; 
+  
+}
+
+.footer-contact p {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  font-size: 13px;      
+  margin-bottom: 8px
+}
+
+.social-icons {
+  text-align: center;
+}
+
+.social-icons a {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: 0 8px;
+  background-size: cover;
+  transition: transform 0.2s ease;
+}
+
+.social-icons img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1); 
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.social-icons img:hover {
+    opacity: 1; 
+    transform: scale(1.1); 
+}
+.social-icons a:hover {
+  transform: scale(1.1);
+}
+
+.facebook { background-image: url('https://th.bing.com/th/id/R.c5911e842cf533aac1369ee3ab9e3ac7?rik=cxjM03MjA0cWAw&riu=http%3a%2f%2fitscheese.com%2fimages%2ffacebook.png&ehk=NZ1pvHO9mQBH13k2cadlpqM1YqhWU8rOMk4X9JU3lsM%3d&risl=&pid=ImgRaw&r=0'); }
+.tiktok   { background-image: url('https://locusmag.com/wp-content/uploads/2023/07/tiktok.jpg'); }
+.linkedin { background-image: url('https://disinfocode.eu/images/microsoft-linkedin1742289593.png'); }

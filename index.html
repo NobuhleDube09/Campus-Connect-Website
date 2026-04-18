@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect</title>
+     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1><i>Campus Connect</i></h1>
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+        <nav class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#" onclick="showAlert('About')">About</a>
+            <a href="#" onclick="showAlert('How It Works')">How It Works</a>
+            <a href="#" onclick="showAlert('Contact')">Contact</a>
+        </nav>
+    
+        <div class="auth-buttons">
+            <button class="btn-login" onclick="showAlert('Login')">Login</button>
+            <button class="btn-signup" onclick="showAlert('Sign Up')">Sign Up</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>
+            Turn Your <span style="color: orange;">Talent</span> Into 
+            <span style="color: orange;">Income</span>!
+        </h1>
+        <p>Discover And Promote Student Skills On Campus</p>
+        
+        <button class="btn-teal" onclick="window.location.href='findServices.html'">Find Services</button>       
+        <button class="btn-orange" onclick="window.location.href='startHustle.html'">Start Your Hustle</button>
+
+
+
+</section>
+
+  <section class="features">
+    <div class="feature">
+      <h3>Find Student Service</h3>
+      <p>Find help for any task</p>
+    </div>
+    <div class="feature">
+      <h3>Promote Your Hustle</h3>
+      <p>Share your skills & services</p>
+    </div>
+    <div class="feature">
+      <h3>Earn & Connect</h3>
+      <p>Network & make money</p>
+    </div>
+  </section>
+
+  <section class="services">
+    <h2>Popular Services on Campus</h2>
+    <p>Explore what's trending</p>
+    <div class="cards">
+      <div class="card tutoring">
+        <h4>Tutoring</h4>
+        <p>Academic Help</p>
+      </div>
+      <div class="card photography">
+        <h4>Photography</h4>
+        <p>Photo & Video</p>
+      </div>
+      <div class="card design">
+        <h4>Graphic Design</h4>
+        <p>Logos & Flyers</p>
+      </div>
+      <div class="card beauty">
+        <h4>Hair & Beauty</h4>
+        <p>Styling & Makeup</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer-banner">
+    <h2>Join Campus Connect Today!</h2>
+    <p>Sign Up & Start Earning</p>
+    <button onclick="showAlert('Get Started')">Get Started</button>
+
+    <hr class="footer-divider">
+    
+    <div class="footer-contact">
+    <p>CONTACT US: CampusConnect@uni.ac.za</p>
+    <div class="social-icons">
+        <a href="#" class="facebook"></a>
+        <a href="#" class="tiktok"></a>
+        <a href="#" class="linkedin"></a>
+        <a href="#" class="X"></a>
+    </div>
+  </div>
+  </section>
+  
+  <script src="main.js"></script>
+</body>
+</html>
