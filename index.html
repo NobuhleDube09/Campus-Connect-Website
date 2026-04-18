@@ -19,9 +19,20 @@
         <nav class="nav-links">
             <a href="#" class="active">Home</a>
             <a href="#" onclick="showAlert('About')">About</a>
-            <a href="#" onclick="showAlert('How It Works')">How It Works</a>
+            <a href="#" onclick="toggleChat()">How It Works</a>
             <a href="#" onclick="showAlert('Contact')">Contact</a>
         </nav>
+
+         <div id="chatbot" class="chatbot">
+            <div class="chat-header">Chat assistant</div>
+             <dic class="chat-body" id="chat-body">
+                <p>Hello! Ask me how it works</p>
+             </dic>
+           <form onsubmit="sendMessage(event)">
+              <input type="text" id="chat-input" placeholder="Type a message...">
+              <button type="submit">Send</button>
+           </form>
+        </div>
     
         <div class="auth-buttons">
             <button class="btn-login" onclick="showAlert('Login')">Login</button>
@@ -82,8 +93,11 @@
         <p>Sign Up & Start Earning</p>
         <button onclick="openModal()">Get Started</button>
 
-        <hr class="footer-divider">
+     <hr class="footer-divider">
         
+    <a href="help.html">
+      <button>Go to Help Center</button>
+    </a>
         <div class="footer-contact">
             <p>CONTACT US: CampusConnect@uni.ac.za</p>
             <div class="social-icons">
