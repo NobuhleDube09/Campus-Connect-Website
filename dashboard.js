@@ -1,61 +1,23 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const userEmail = urlParams.get('email');
+// ===== SIDEBAR FUNCTIONS =====
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (sidebar) sidebar.classList.toggle('active');
+    if (overlay) overlay.classList.toggle('active');
+}
 
-    if (userEmail) {
-        await loadUserData(userEmail);
-        await loadProviders();
-        // Save email to localStorage for future visits
-        localStorage.setItem('userEmail', userEmail);
-    } else {
-        const savedEmail = localStorage.getItem('userEmail');
-        if (savedEmail) {
-            await loadUserData(savedEmail);
-            await loadProviders();
-        } else {
-            window.location.href = 'index.html';
-        }
-    }
+function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (sidebar) sidebar.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
+}
 
-    // ===== SIDEBAR TOGGLE =====
-    const menuToggle = document.getElementById("menuToggle");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("sidebarOverlay");
-
-    if (menuToggle && sidebar) {
-        // Toggle sidebar when hamburger is clicked
-        menuToggle.addEventListener("click", (e) => {
-            e.stopPropagation();
-            sidebar.classList.toggle("active");
-            if (overlay) overlay.classList.toggle("active");
-        });
-
-        // Close sidebar when overlay is clicked
-        if (overlay) {
-            overlay.addEventListener("click", () => {
-                sidebar.classList.remove("active");
-                overlay.classList.remove("active");
-            });
-        }
-
-        // Close sidebar when pressing Escape key
-        document.addEventListener("keydown", (e) => {
-            if (e.key === 'Escape' && sidebar.classList.contains("active")) {
-                sidebar.classList.remove("active");
-                if (overlay) overlay.classList.remove("active");
-            }
-        });
-    }
-
-    // ===== LOGOUT =====
-    const logoutBtn = document.querySelector('.btn-logout');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('userEmail');
-            window.location.href = 'index.html';
-        });
-    }
-});
+// ===== LOGOUT FUNCTION =====
+function logout() {
+    localStorage.removeItem('userEmail');
+    window.location.href = 'index.html';
+}
 
 // ===== LOAD USER DATA =====
 async function loadUserData(email) {
@@ -71,7 +33,6 @@ async function loadUserData(email) {
         if (data.success) {
             const user = data.user;
 
-            // Update sidebar elements
             const fullNameElem = document.getElementById('full-name');
             const studentIdElem = document.getElementById('student-id');
             const userEmailElem = document.getElementById('user-email');
@@ -83,7 +44,6 @@ async function loadUserData(email) {
             if (userEmailElem) userEmailElem.innerText = user.Email;
             if (serviceNeededElem) serviceNeededElem.innerText = user.ServiceNeeded || 'Not specified';
 
-            // Update profile image with initials
             if (profileImageElem) {
                 const initials = `${user.FullName.charAt(0)}${user.Surname.charAt(0)}`;
                 profileImageElem.src = `https://ui-avatars.com/api/?background=2563eb&color=fff&size=120&name=${initials}`;
@@ -93,7 +53,6 @@ async function loadUserData(email) {
         }
     } catch (error) {
         console.error('Error loading user data:', error);
-        // Show error in UI
         const fullNameElem = document.getElementById('full-name');
         if (fullNameElem) fullNameElem.innerText = 'Error loading data';
     }
@@ -151,7 +110,7 @@ function displayProviders(providers) {
     `).join('');
 }
 
-// ===== HELPER: Escape HTML to prevent XSS =====
+// ===== HELPER: ESCAPE HTML =====
 function escapeHtml(str) {
     if (!str) return '';
     return str
@@ -165,13 +124,11 @@ function escapeHtml(str) {
 // ===== VIEW PROVIDER DETAILS =====
 function viewProvider(providerId) {
     alert(`Viewing provider ${providerId} - Full profile coming soon`);
-    // You can implement a modal or redirect to provider profile page
 }
 
 // ===== FILTER BY CATEGORY =====
 function filterByCategory(category) {
     alert(`Showing ${category} services`);
-    // Implement filtering logic here
 }
 
 // ===== SEARCH SERVICES =====
@@ -180,11 +137,10 @@ function searchServices() {
     if (searchInput) {
         const query = searchInput.value;
         alert(`Searching for: ${query}`);
-        // Implement search logic here
     }
 }
 
-// ===== BROWSE ALL PROVIDERS =====
+// ===== BROWSE ALL PROVIDERS (MODAL) =====
 function browseAllProviders() {
     const modal = document.getElementById('providersModal');
     if (modal) {
@@ -219,33 +175,13 @@ function closeProvidersModal() {
 }
 
 // ===== OTHER FUNCTIONS =====
-function editProfile() {
-    alert('Edit Profile feature coming soon');
-}
-
-function viewFavorites() {
-    alert('Favorites feature coming soon');
-}
-
-function viewBookings() {
-    alert('Bookings feature coming soon');
-}
-
-function viewAllRecommended() {
-    alert('View all recommendations coming soon');
-}
-
-function openMessages() {
-    alert('Messages feature coming soon');
-}
-
-function openSaved() {
-    alert('Saved listings feature coming soon');
-}
-
-function openSettings() {
-    alert('Settings feature coming soon');
-}
+function editProfile() { alert('Edit Profile feature coming soon'); }
+function viewFavorites() { alert('Favorites feature coming soon'); }
+function viewBookings() { alert('Bookings feature coming soon'); }
+function viewAllRecommended() { alert('View all recommendations coming soon'); }
+function openMessages() { alert('Messages feature coming soon'); }
+function openSaved() { alert('Saved listings feature coming soon'); }
+function openSettings() { alert('Settings feature coming soon'); }
 
 // ===== CLOSE MODAL WHEN CLICKING OUTSIDE =====
 window.onclick = function(event) {
@@ -254,3 +190,50 @@ window.onclick = function(event) {
         closeProvidersModal();
     }
 }
+
+// ===== DOM CONTENT LOADED =====
+document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userEmail = urlParams.get('email');
+
+    if (userEmail) {
+        await loadUserData(userEmail);
+        await loadProviders();
+        localStorage.setItem('userEmail', userEmail);
+    } else {
+        const savedEmail = localStorage.getItem('userEmail');
+        if (savedEmail) {
+            await loadUserData(savedEmail);
+            await loadProviders();
+        } else {
+            window.location.href = 'index.html';
+        }
+    }
+
+    // Sidebar toggle setup
+    const menuToggle = document.getElementById("menuToggle");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener("click", (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle("active");
+            if (overlay) overlay.classList.toggle("active");
+        });
+
+        if (overlay) {
+            overlay.addEventListener("click", () => {
+                sidebar.classList.remove("active");
+                overlay.classList.remove("active");
+            });
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains("active")) {
+                sidebar.classList.remove("active");
+                if (overlay) overlay.classList.remove("active");
+            }
+        });
+    }
+});

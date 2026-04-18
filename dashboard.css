@@ -387,6 +387,7 @@ body {
 
 /* Individual Card Background Images */
 /* Individual Card Background Images - Using reliable Unsplash images */
+/* Replace the image URLs with working online images */
 .service-categories .card.tutoring {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('tutoring.webp');
   background-size: cover;
@@ -479,7 +480,7 @@ body {
 
 /* Browse Button */
 .btn-browse {
-  background: linear-gradient(135deg, #2eb997, #084d43);
+  background: linear-gradient(135deg, rgba(214, 142, 8, 0.856));
   color: white;
   border: none;
   padding: 14px 28px;
