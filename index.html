@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Connect</title>
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -25,8 +25,7 @@
     
         <div class="auth-buttons">
             <button class="btn-login" onclick="showAlert('Login')">Login</button>
-            <button class="btn-signup" onclick="window.location.href='seeker.html'">Sign Up</button>
-
+            <button class="btn-signup" onclick="openModal()">Sign Up</button>
         </div>
     </header>
 
@@ -37,68 +36,153 @@
         </h1>
         <p>Discover And Promote Student Skills On Campus</p>
         <button class="btn-teal" onclick="showAlert('Find Services')">Find Services</button>
-        <button class="btn-orange" onclick="showAlert('Start Your Hustle')">Start Your Hustle</button>
+        <button class="btn-orange" onclick="openProviderModal()">Start Your Hustle</button>
+    </section>
 
-</section>
+    <section class="features">
+        <div class="feature">
+            <h3>Find Student Service</h3>
+            <p>Find help for any task</p>
+        </div>
+        <div class="feature">
+            <h3>Promote Your Hustle</h3>
+            <p>Share your skills & services</p>
+        </div>
+        <div class="feature">
+            <h3>Earn & Connect</h3>
+            <p>Network & make money</p>
+        </div>
+    </section>
 
-  <section class="features">
-    <div class="feature">
-      <h3>Find Student Service</h3>
-      <p>Find help for any task</p>
+    <section class="services">
+        <h2>Popular Services on Campus</h2>
+        <p>Explore what's trending</p>
+        <div class="cards">
+            <div class="card tutoring">
+                <h4>Tutoring</h4>
+                <p>Academic Help</p>
+            </div>
+            <div class="card photography">
+                <h4>Photography</h4>
+                <p>Photo & Video</p>
+            </div>
+            <div class="card design">
+                <h4>Graphic Design</h4>
+                <p>Logos & Flyers</p>
+            </div>
+            <div class="card beauty">
+                <h4>Hair & Beauty</h4>
+                <p>Styling & Makeup</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="footer-banner">
+        <h2>Join Campus Connect Today!</h2>
+        <p>Sign Up & Start Earning</p>
+        <button onclick="openModal()">Get Started</button>
+
+        <hr class="footer-divider">
+        
+        <div class="footer-contact">
+            <p>CONTACT US: CampusConnect@uni.ac.za</p>
+            <div class="social-icons">
+                <a href="#" class="facebook"></a>
+                <a href="#" class="tiktok"></a>
+                <a href="#" class="linkedin"></a>
+                <a href="#" class="X"></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sign Up Modal for Service Seeker -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Sign Up as a Service Seeker</h2>
+            <form id="popupSignupForm">
+                <label for="fullName">Full Names</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your name" required>
+
+                <label for="surname">Surname</label>
+                <input type="text" id="surname" name="surname" placeholder="Enter your surname" required>
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                <label for="studentNumber">Student Number</label>
+                <input type="number" id="studentNumber" name="studentNumber" placeholder="Enter your student number">
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+
+                <label for="servicesNeeded">What services are you looking for?</label>
+                <textarea id="servicesNeeded" name="servicesNeeded" placeholder="e.g. Tutoring in Math, Photography for event" rows="3"></textarea>
+
+                <button type="submit">Sign Up as Seeker</button>
+            </form>
+            <p id="responseMessage"></p>
+        </div>
     </div>
-    <div class="feature">
-      <h3>Promote Your Hustle</h3>
-      <p>Share your skills & services</p>
+
+    <!-- Sign Up Modal for Service Provider (Start Your Hustle) -->
+    <div id="providerModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="closeProviderModal()">&times;</span>
+            <h2>Start Your Hustle - Become a Service Provider</h2>
+            <form id="popupProviderForm">
+                <label for="providerFullName">Full Names *</label>
+                <input type="text" id="providerFullName" name="providerFullName" placeholder="Enter your full name" required>
+
+                <label for="providerSurname">Surname *</label>
+                <input type="text" id="providerSurname" name="providerSurname" placeholder="Enter your surname" required>
+
+                <label for="providerEmail">Email Address *</label>
+                <input type="email" id="providerEmail" name="providerEmail" placeholder="Enter your email" required>
+
+                <label for="providerStudentNumber">Student Number *</label>
+                <input type="number" id="providerStudentNumber" name="providerStudentNumber" placeholder="Enter your student number" required>
+
+                <label for="providerPassword">Password *</label>
+                <input type="password" id="providerPassword" name="providerPassword" placeholder="Create a password" required>
+
+                <label for="providerConfirmPassword">Confirm Password *</label>
+                <input type="password" id="providerConfirmPassword" name="providerConfirmPassword" placeholder="Confirm your password" required>
+
+                <label for="serviceType">Service Type *</label>
+                <select id="serviceType" name="serviceType" required>
+                    <option value="">Select a service</option>
+                    <option value="Tutoring">Tutoring</option>
+                    <option value="Photography">Photography</option>
+                    <option value="Graphic Design">Graphic Design</option>
+                    <option value="Hair & Beauty">Hair & Beauty</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="IT Support">IT Support</option>
+                    <option value="Music Lessons">Music Lessons</option>
+                    <option value="Fitness Training">Fitness Training</option>
+                </select>
+
+                <label for="bio">Bio / Description *</label>
+                <textarea id="bio" name="bio" placeholder="Tell students about yourself and your services..." rows="3" required></textarea>
+
+                <label for="hourlyRate">Hourly Rate (ZAR) *</label>
+                <input type="number" id="hourlyRate" name="hourlyRate" placeholder="e.g., 250" required>
+
+                <label for="providerCampus">Campus</label>
+                <input type="text" id="providerCampus" name="providerCampus" placeholder="e.g., APB Campus">
+
+                <label for="availability">Availability</label>
+                <input type="text" id="providerAvailability" name="providerAvailability" placeholder="e.g., Mon-Fri 3-7 PM">
+
+                <button type="submit">Sign Up as Provider</button>
+            </form>
+            <p id="providerResponseMessage"></p>
+        </div>
     </div>
-    <div class="feature">
-      <h3>Earn & Connect</h3>
-      <p>Network & make money</p>
-    </div>
-  </section>
 
-  <section class="services">
-    <h2>Popular Services on Campus</h2>
-    <p>Explore what's trending</p>
-    <div class="cards">
-      <div class="card tutoring">
-        <h4>Tutoring</h4>
-        <p>Academic Help</p>
-      </div>
-      <div class="card photography">
-        <h4>Photography</h4>
-        <p>Photo & Video</p>
-      </div>
-      <div class="card design">
-        <h4>Graphic Design</h4>
-        <p>Logos & Flyers</p>
-      </div>
-      <div class="card beauty">
-        <h4>Hair & Beauty</h4>
-        <p>Styling & Makeup</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="footer-banner">
-    <h2>Join Campus Connect Today!</h2>
-    <p>Sign Up & Start Earning</p>
-    <button onclick="showAlert('Get Started')">Get Started</button>
-
-    <hr class="footer-divider">
-    
-    <div class="footer-contact">
-    <p>CONTACT US: CampusConnect@uni.ac.za</p>
-    <div class="social-icons">
-        <a href="#" class="facebook"></a>
-        <a href="#" class="tiktok"></a>
-        <a href="#" class="linkedin"></a>
-        <a href="#" class="X"></a>
-    </div>
-  </div>
-  </section>
-  <form class="signup-form" onsubmit="return validateSignupUser(event)">
-
-  <script src="main.js"></script>
-
+    <script src="main.js"></script>
 </body>
 </html>
