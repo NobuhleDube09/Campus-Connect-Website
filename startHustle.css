@@ -4,7 +4,6 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
-    
 }
 
 body {
@@ -41,7 +40,7 @@ header .logo h1 {
     font-size: 1.5rem;
     color: rgb(2, 74, 74);
     cursor: pointer;
-    display: none; /* show only on mobile */
+    display: none;
 }
 
 .nav-links {
@@ -87,24 +86,25 @@ form {
     border-radius: 8px;
     box-shadow: 0 2px 8px orange;
 }
-/* back-link*/
+
+/* back-link */
 .back-link {
-  display: inline-block;
-  font-size: 16px;
-  font-weight: 500;
-  color: #ff6600; /* orange tone to match your theme */
-  text-decoration: none;
-  margin: 10px 0;
-  transition: color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ff6600;
+    text-decoration: none;
+    margin: 10px 0;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .back-link:hover {
-  color: #cc5200; /* darker orange on hover */
-  transform: translateX(-3px); /* subtle left shift for effect */
+    color: #cc5200;
+    transform: translateX(-3px);
 }
 
 .back-link:active {
-  color: #993d00; /* even darker when clicked */
+    color: #993d00;
 }
 
 form h1 {
@@ -163,7 +163,7 @@ label {
     color: teal;
 }
 
-/* Portfolio Gallery Items (when images are added) */
+/* Portfolio Gallery Items */
 .portfolio-gallery img {
     width: 120px;
     height: 120px;
@@ -177,7 +177,6 @@ label {
     transform: scale(1.05);
     border-color: #3498db;
 }
-
 
 input[type="text"],
 textarea,
@@ -193,16 +192,6 @@ textarea {
     resize: vertical;
 }
 
-.upload-box,
-.portfolio-gallery {
-    border: 2px dashed #ccc;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 6px;
-    background: #fafafa;
-}
-
 .price-group {
     display: flex;
     gap: 10px;
@@ -211,6 +200,8 @@ textarea {
 .tags-container {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .tags-container button {
@@ -221,8 +212,9 @@ textarea {
     border-radius: 4px;
     cursor: pointer;
 }
+
 .tags-container button:hover {
-  background: orange;
+    background: orange;
 }
 
 .publish-btn {
@@ -239,21 +231,127 @@ textarea {
     font-weight: bold;
 }
 
-
 .publish-btn:hover {
     background: orange;
 }
 
-/* Back link */
-.back-link {
-    display: inline-block;
-    margin-bottom: 15px;
-    text-decoration: none;
-    color: orange;
-    font-weight: bold;
+/* ===== MESSAGE BOX STYLES ===== */
+.message-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 15px 20px;
+    border-radius: 8px;
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: slideIn 0.3s ease;
 }
 
-/* Responsive */
+.message-box.info {
+    background: #2196F3;
+    color: white;
+}
+
+.message-box.success {
+    background: #4CAF50;
+    color: white;
+}
+
+.message-box.error {
+    background: #f44336;
+    color: white;
+}
+
+.message-box .loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.message-box .loading::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ===== FORM STYLES FOR ADD SERVICE ===== */
+.service-form {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.service-form h1 {
+    margin-bottom: 25px;
+    color: #333;
+    text-align: center;
+}
+
+.service-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+.service-form input,
+.service-form select,
+.service-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.service-form textarea {
+    resize: vertical;
+}
+
+.service-form .publish-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #2eb997, #084d43);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.service-form .publish-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 185, 151, 0.4);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
     .nav-links {
         display: none;
@@ -266,7 +364,28 @@ textarea {
         padding: 10px;
     }
 
+    .nav-links.active {
+        display: flex;
+    }
+
+    .auth-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .menu-toggle {
         display: block;
+    }
+
+    .message-box {
+        min-width: 250px;
+        max-width: 350px;
+        font-size: 14px;
+    }
+
+    .service-form {
+        margin: 20px;
+        padding: 20px;
     }
 }
