@@ -41,11 +41,9 @@ async function connectToDatabase() {
         pool = poolConnection;
         console.log("✅ Connected to SQL Server");
         
-        // Handle connection errors after successful connection
         poolConnection.on('error', (err) => {
             console.error('Database connection error:', err);
             pool = null;
-            // Try to reconnect after 5 seconds
             setTimeout(() => {
                 console.log('Attempting to reconnect to database...');
                 connectToDatabase();
@@ -56,7 +54,6 @@ async function connectToDatabase() {
     } catch (err) {
         console.error("❌ DB connection error:", err.message);
         isConnecting = false;
-        // Retry connection after 10 seconds
         setTimeout(() => {
             console.log('Retrying database connection...');
             connectToDatabase();
@@ -267,7 +264,6 @@ app.post("/add-service", async (req, res) => {
     }
     
     try {
-        // Check if provider exists
         const checkProvider = await pool.request()
             .input('email', sql.NVarChar, providerEmail)
             .query("SELECT * FROM ServiceProviders WHERE Email = @email");
@@ -276,7 +272,6 @@ app.post("/add-service", async (req, res) => {
             return res.status(404).json({ success: false, message: "Provider not found" });
         }
         
-        // Update provider's service details
         await pool.request()
             .input('email', sql.NVarChar, providerEmail)
             .input('serviceType', sql.NVarChar, category)
@@ -296,15 +291,91 @@ app.post("/add-service", async (req, res) => {
     }
 });
 
+// ===== PROVIDER DASHBOARD ENDPOINTS =====
+
+// Get provider by email
+app.get("/provider/:email", async (req, res) => {
+    const { email } = req.params;
+    
+    if (!pool) {
+        return res.status(503).json({ success: false, message: "Database not ready" });
+    }
+    
+    try {
+        const result = await pool.request()
+            .input('email', sql.NVarChar, email)
+            .query("SELECT Id, FullName, Surname, Email, StudentNumber, ServiceType, Bio, HourlyRate, Campus, Availability, Rating FROM ServiceProviders WHERE Email = @email");
+        
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ success: false, message: "Provider not found" });
+        }
+        
+        res.json({ success: true, provider: result.recordset[0] });
+    } catch (err) {
+        console.error("Error fetching provider:", err);
+        res.status(500).json({ success: false, message: "Failed to fetch provider" });
+    }
+});
+
+// Get provider's services
+app.get("/provider-services/:email", async (req, res) => {
+    const { email } = req.params;
+    
+    if (!pool) {
+        return res.status(503).json({ success: false, message: "Database not ready" });
+    }
+    
+    try {
+        const result = await pool.request()
+            .input('email', sql.NVarChar, email)
+            .query("SELECT Id, ServiceType, Bio, HourlyRate, Campus, Availability, Rating FROM ServiceProviders WHERE Email = @email");
+        
+        res.json({ success: true, services: result.recordset });
+    } catch (err) {
+        console.error("Error fetching provider services:", err);
+        res.status(500).json({ success: false, message: "Failed to fetch services" });
+    }
+});
+
+// Update provider profile
+app.put("/provider/update", async (req, res) => {
+    const { email, fullName, surname, bio, hourlyRate, campus, availability } = req.body;
+    
+    if (!pool) {
+        return res.status(503).json({ success: false, message: "Database not ready" });
+    }
+    
+    try {
+        await pool.request()
+            .input('email', sql.NVarChar, email)
+            .input('fullName', sql.NVarChar, fullName)
+            .input('surname', sql.NVarChar, surname)
+            .input('bio', sql.NVarChar, bio || null)
+            .input('hourlyRate', sql.Decimal, hourlyRate || null)
+            .input('campus', sql.NVarChar, campus || null)
+            .input('availability', sql.NVarChar, availability || null)
+            .query(`UPDATE ServiceProviders 
+                    SET FullName = @fullName, Surname = @surname, Bio = @bio, 
+                        HourlyRate = @hourlyRate, Campus = @campus, Availability = @availability
+                    WHERE Email = @email`);
+        
+        res.json({ success: true, message: "Profile updated successfully!" });
+    } catch (err) {
+        console.error("Error updating provider:", err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
 // ===== START SERVER =====
 const PORT = 3000;
 app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-    console.log(`Test: GET http://localhost:${PORT}/test`);
-    console.log(`Signup: POST http://localhost:${PORT}/signup`);
-    console.log(`Login: POST http://localhost:${PORT}/login`);
-    console.log(`Providers: GET http://localhost:${PORT}/providers`);
-    console.log(`Dashboard: http://localhost:${PORT}/dashboard.html`);
+    console.log(`✅ Server running on http://localhost:${PORT}`);
+    console.log(`📝 Test: GET http://localhost:${PORT}/test`);
+    console.log(`📝 Signup: POST http://localhost:${PORT}/signup`);
+    console.log(`📝 Login: POST http://localhost:${PORT}/login`);
+    console.log(`📝 Providers: GET http://localhost:${PORT}/providers`);
+    console.log(`📝 Provider Dashboard: GET http://localhost:${PORT}/provider/:email`);
+    console.log(`📝 Dashboard: http://localhost:${PORT}/dashboard.html`);
 });
 
 // ===== INITIATE DATABASE CONNECTION =====

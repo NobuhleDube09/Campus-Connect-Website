@@ -1,16 +1,34 @@
-// Open modal
+//function openSignup() {
+  //document.getElementById("signupModal").style.display = "flex";
+//
+
+//function closeSignup() {
+  //document.getElementById("signupModal").style.display = "none";}//
+
 function openModal() {
     document.getElementById("signupModal").style.display = "block";
 }
 
-// Close modal
+// Close Seeker Modal
 function closeModal() {
     document.getElementById("signupModal").style.display = "none";
     document.getElementById("popupSignupForm").reset();
     document.getElementById("responseMessage").innerText = "";
 }
 
-// Handle form submission
+// Open Provider Modal (Start Your Hustle)
+function openProviderModal() {
+    document.getElementById("providerModal").style.display = "block";
+}
+
+// Close Provider Modal
+function closeProviderModal() {
+    document.getElementById("providerModal").style.display = "none";
+    document.getElementById("popupProviderForm").reset();
+    document.getElementById("providerResponseMessage").innerText = "";
+}
+
+// ===== HANDLE SERVICE SEEKER SIGN UP =====
 document.getElementById("popupSignupForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     
@@ -67,39 +85,7 @@ document.getElementById("popupSignupForm").addEventListener("submit", async func
     }
 });
 
-// Close modal when clicking outside
-window.onclick = function(event) {
-    const modal = document.getElementById("signupModal");
-    if (event.target == modal) {
-        closeModal();
-    }
-}
-
-// Keep your existing functions (if any)
-function toggleMenu() {
-    const navLinks = document.querySelector('.nav-links');
-    const authButtons = document.querySelector('.auth-buttons');
-    navLinks.classList.toggle('show');
-    authButtons.classList.toggle('show');
-}
-
-function showAlert(message) {
-    alert(message + " feature coming soon!");
-}
-
-// Open Provider Modal (Start Your Hustle)
-function openProviderModal() {
-    document.getElementById("providerModal").style.display = "block";
-}
-
-// Close Provider Modal
-function closeProviderModal() {
-    document.getElementById("providerModal").style.display = "none";
-    document.getElementById("popupProviderForm").reset();
-    document.getElementById("providerResponseMessage").innerText = "";
-}
-
-// Handle Service Provider Sign Up
+// ===== HANDLE SERVICE PROVIDER SIGN UP =====
 document.getElementById("popupProviderForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     
@@ -152,8 +138,8 @@ document.getElementById("popupProviderForm").addEventListener("submit", async fu
             responseMsg.innerText = "Success! You are now a service provider!";
             setTimeout(() => {
                 closeProviderModal();
-                alert("Welcome to Campus Connect! You can now start offering your services.");
-                window.location.href = `dashboard.html?email=${encodeURIComponent(email)}`;
+                // Redirect to provider dashboard
+                window.location.href = `providerDashboard.html?email=${encodeURIComponent(email)}`;
             }, 1500);
         } else {
             responseMsg.style.color = "red";
@@ -165,26 +151,140 @@ document.getElementById("popupProviderForm").addEventListener("submit", async fu
         responseMsg.innerText = "Error signing up. Make sure server is running on port 3000";
     }
 });
-function toggleChat() {
-  const chat = document.getElementById("chatbot");
-  chat.style.display = chat.style.display === "block" ? "none" : "block";
+
+// ===== UI FUNCTIONS =====
+
+function toggleMenu() {
+    const navLinks = document.querySelector('.nav-links');
+    const authButtons = document.querySelector('.auth-buttons');
+    if (navLinks) navLinks.classList.toggle('show');
+    if (authButtons) authButtons.classList.toggle('show');
 }
 
-function handleKey(e) {
-  if (e.key === "Enter") {
-    let input = document.getElementById("chat-input");
-    let message = input.value;
+function showAlert(message) {
+    alert(message + " feature coming soon!");
+}
 
-    let chatBody = document.getElementById("chat-body");
-    chatBody.innerHTML += "<p><b>You:</b> " + message + "</p>";
-
-    // Simple response logic
-    if (message.toLowerCase().includes("how")) {
-      chatBody.innerHTML += "<p><b>Bot:</b> We connect students to services easily.</p>";
-    } else {
-      chatBody.innerHTML += "<p><b>Bot:</b> I’m still learning 😅</p>";
+// Close modals when clicking outside
+window.onclick = function(event) {
+    const seekerModal = document.getElementById("signupModal");
+    const providerModal = document.getElementById("providerModal");
+    if (event.target == seekerModal) {
+        closeModal();
     }
-
-    input.value = "";
-  }
+    if (event.target == providerModal) {
+        closeProviderModal();
+    }
 }
+
+// ===== CHATBOT FUNCTIONS =====
+
+let isChatOpen = false;
+
+function toggleChat() {
+    const chatbot = document.getElementById('chatbot');
+    if (!chatbot) return;
+    isChatOpen = !isChatOpen;
+    chatbot.classList.toggle('active');
+}
+
+function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    if (!input) return;
+    const message = input.value.trim();
+    if (message === '') return;
+    
+    addMessage(message, 'user');
+    input.value = '';
+    
+    setTimeout(() => {
+        const response = getBotResponse(message);
+        addMessage(response, 'bot');
+    }, 500);
+}
+
+function sendQuickMessage(message) {
+    addMessage(message, 'user');
+    setTimeout(() => {
+        const response = getBotResponse(message);
+        addMessage(response, 'bot');
+    }, 500);
+}
+
+function addMessage(message, sender) {
+    const chatBody = document.getElementById('chat-body');
+    if (!chatBody) return;
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}`;
+    
+    if (sender === 'bot') {
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <i class="fas fa-robot"></i>
+                <p>${escapeHtml(message)}</p>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <p>${escapeHtml(message)}</p>
+            </div>
+        `;
+    }
+    
+    chatBody.appendChild(messageDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function getBotResponse(message) {
+    const msg = message.toLowerCase();
+    
+    if (msg.includes('sign up') || msg.includes('register')) {
+        return "📝 To sign up, click the 'Sign Up' button on the homepage. You'll need your student email and student ID number. It's free!";
+    } else if (msg.includes('list') || msg.includes('service') || msg.includes('hustle')) {
+        return "💼 To list a service, click 'Start Your Hustle'. Fill in your service details, set your price, add photos, and publish! Students will see it immediately.";
+    } else if (msg.includes('payment') || msg.includes('pay')) {
+        return "💰 We accept Mobile Money, Credit/Debit cards, Bank Transfer, and Cash on pickup. All payments are secure and encrypted.";
+    } else if (msg.includes('cancel') || msg.includes('order')) {
+        return "❌ You can cancel an order within 24 hours from your 'My Orders' page. A full refund will be processed within 3-5 business days.";
+    } else if (msg.includes('password') || msg.includes('forgot')) {
+        return "🔑 If you forgot your password, click 'Forgot Password' on the login page. You'll receive a reset link in your email.";
+    } else if (msg.includes('profile') || msg.includes('update')) {
+        return "👤 Go to your Dashboard, click on your profile picture, and select 'Edit Profile' to update your information.";
+    } else if (msg.includes('rating') || msg.includes('review')) {
+        return "⭐ After a service is completed, you can rate the provider from 1-5 stars. Ratings help build trust in our community!";
+    } else if (msg.includes('how it works')) {
+        return "📚 Campus Connect connects students! Sign up, complete your profile, find or offer services, connect, and earn. Check the steps in our Help Center for more details!";
+    } else {
+        return "Thanks for your question! 🙏 Please check our FAQ section or ask something specific about signup, payments, listings, or cancellations.";
+    }
+}
+
+function handleChatKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendChatMessage();
+    }
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// Close chat when clicking outside
+document.addEventListener('click', function(event) {
+    const chatbot = document.getElementById('chatbot');
+    if (!chatbot) return;
+    const isClickInside = chatbot.contains(event.target);
+    
+    if (!isClickInside && isChatOpen) {
+        chatbot.classList.remove('active');
+        isChatOpen = false;
+    }
+});

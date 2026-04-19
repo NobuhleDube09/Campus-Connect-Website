@@ -3,63 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusConnecthelp</title>
-    <script src="help.js" defer></script>
-    <link href="help.css" rel="stylesheet">
-    
+    <title>Campus Connect - How It Works & Help</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .help-header {
+            background: linear-gradient(135deg, #2eb997 0%, #084d43 100%);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 24px;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            color: #1e293b;
+            margin-bottom: 50px;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .step:hover {
+            transform: translateY(-10px);
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2eb997, #084d43);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .step-icon i {
+            font-size: 40px;
+            color: white;
+        }
+
+        .step h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+
+        .step p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .faq-item {
+            background: white;
+            margin: 15px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            padding: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            transition: 0.3s;
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+        }
+
+        .faq-question i {
+            color: #2eb997;
+            margin-right: 15px;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 20px 20px 60px;
+            color: #64748b;
+            line-height: 1.6;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-question .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .help-header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .faq-answer {
+                padding: 0 15px 15px 40px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Campus Connect</h1>
-    <div class="help-container">
-       <h1>Need help? We’ve got you covered.</h1>
-       <h2>Most frequently asked questions</h2>
 
-       <div class="faq">
-    <div class="question">Who can use this platform?</div>
-    <div class="answer">
-      Only registered students (or verified users) can create listings, buy items, or contact sellers.
+<header class="help-header">
+    <div class="logo">
+        <h1><i class="fas fa-graduation-cap"></i> Campus Connect</h1>
     </div>
-  </div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="#" class="active">How It Works</a>
+        <a href="#" onclick="showAlert('About')">About</a>
+        <a href="#" onclick="showAlert('Contact')">Contact</a>
+    </nav>
+</header>
 
-       <div class="faq">
-    <div class="question"> I forgot my password, what do I do?</div>
-    <div class="answer">
-      Click “Forgot Password” on the login page and follow the reset instructions sent to your email
+<section class="hero">
+    <h1>How Campus Connect Works</h1>
+    <p>Connect, Share Skills, and Earn Money on Campus!</p>
+</section>
+
+<div class="how-it-works">
+    <h2 class="section-title">Getting Started is Easy!</h2>
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h3>1. Sign Up</h3>
+            <p>Create your free account using your student email. Choose to be a Service Seeker or Service Provider.</p>
+        </div>
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-edit"></i>
+            </div>
+            <h3>2. Complete Profile</h3>
+            <p>Add your photo, student ID, and tell others about your skills or what services you need.</p>
+        </div>
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>3. Find or Offer Services</h3>
+            <p>Browse available services or list your own. Connect with students who need your help!</p>
+        </div>
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <h3>4. Connect & Earn</h3>
+            <p>Chat, agree on terms, complete the service, and get paid. Build your reputation with ratings!</p>
+        </div>
     </div>
-  </div>
-
-
-  
-  
-  <div class="faq">
-    <div class="question">How do I update my profile</div>
-    <div class="answer">
-      Go to your account settings and edit your personal information.
-    </div>
-  </div>
-
-  <div class="faq">
-    <div class="question">How do I contact support?</div>
-    <div class="answer">
-      Go to your account and click "Get help" next to your order.
-    </div>
-  </div>
-
-  <div class="faq">
-    <div class="question">How do I cancel an order?</div>
-    <div class="answer">
-      You can cancel from your orders page before it ships.
-    </div>
-  </div>
-
-  <div class="faq">
-    <div class="question">How can I get a refund?</div>
-    <div class="answer">
-      Request a return within 30 days from your account.
-    </div>
-  </div>
 </div>
 
+<div class="faq-section">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-user-circle"></i> Who can use Campus Connect?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            Only registered students with a valid student email can use Campus Connect. This ensures a safe and trustworthy community.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-key"></i> I forgot my password. What do I do?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            Click "Forgot Password" on the login page. Enter your email, and you'll receive a reset link. Create a new password and log in.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-credit-card"></i> How do I make a payment?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            We support Mobile Money, Credit/Debit cards, Bank Transfer, and Cash on pickup. All transactions are secure and encrypted.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-briefcase"></i> How do I list my service?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            Click "Start Your Hustle" on the homepage. Fill in your service details, price, availability, and publish. Your service will be visible to all students!
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-star"></i> How do ratings work?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            After a service is completed, both parties can rate each other from 1-5 stars. Higher ratings help you get more clients!
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-ban"></i> How do I cancel an order?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            You can cancel within 24 hours from your "My Orders" page. A full refund will be processed within 3-5 business days.
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2024 Campus Connect. Connect, Share, and Earn on Campus!</p>
+</footer>
+
+<script>
+    function toggleFAQ(element) {
+        const faqItem = element.closest('.faq-item');
+        faqItem.classList.toggle('active');
+    }
+    
+    function showAlert(message) {
+        alert(message + " feature coming soon!");
+    }
+</script>
 
 </body>
 </html>
