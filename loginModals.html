@@ -1,0 +1,35 @@
+<!-- Login Choice Modal -->
+<div id="loginChoiceModal" class="modal">
+  <div class="modal-content">
+    <h2>Login As</h2>
+    <button class="btn-teal" onclick="openForm('seeker')">Service Seeker</button>
+    <button class="btn-orange" onclick="openForm('provider')">Service Provider</button>
+    <span class="close" onclick="closeModal('loginChoiceModal')">&times;</span>
+  </div>
+</div>
+
+<!-- Service Seeker Login Form -->
+<div id="seekerForm" class="modal">
+  <div class="modal-content">
+    <h2>Service Seeker Login</h2>
+    <form>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit" class="btn-teal">Login</button>
+    </form>
+    <span class="close" onclick="closeModal('seekerForm')">&times;</span>
+  </div>
+</div>
+
+<!-- Service Provider Login Form -->
+<div id="providerForm" class="modal">
+  <div class="modal-content">
+    <h2>Service Provider Login</h2>
+    <form>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit" class="btn-orange">Login</button>
+    </form>
+    <span class="close" onclick="closeModal('providerForm')">&times;</span>
+  </div>
+</div>
