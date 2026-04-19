@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const sql = require("mssql/msnodesqlv8");
+const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
 const path = require("path");
 
@@ -21,90 +21,119 @@ app.use((req, res, next) => {
     next();
 });
 
-const connectionString = "Driver={ODBC Driver 17 for SQL Server};Server=DESKTOP-3D29LS2;Database=CampusConnectDB;Trusted_Connection=yes;Encrypt=no;";
-
-const config = {
-    connectionString: connectionString,
-    driver: "msnodesqlv8"
-};
-
-let pool;
-let isConnecting = false;
-
-// ===== DATABASE CONNECTION WITH AUTO-RECONNECT =====
-async function connectToDatabase() {
-    if (isConnecting) return;
-    isConnecting = true;
-    
-    try {
-        const poolConnection = await sql.connect(config);
-        pool = poolConnection;
-        console.log("✅ Connected to SQL Server");
-        
-        poolConnection.on('error', (err) => {
-            console.error('Database connection error:', err);
-            pool = null;
-            setTimeout(() => {
-                console.log('Attempting to reconnect to database...');
-                connectToDatabase();
-            }, 5000);
-        });
-        
-        isConnecting = false;
-    } catch (err) {
-        console.error("❌ DB connection error:", err.message);
-        isConnecting = false;
-        setTimeout(() => {
-            console.log('Retrying database connection...');
-            connectToDatabase();
-        }, 10000);
+// PostgreSQL connection using Render database
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL || "postgresql://campusadmin:Z0fF9lAOagrJn8xHXs2NZ5YYptSFmDe4@dpg-d7ieh0m7r5hc73c8kcc0-a:5432/campusconnectdb_pcwk",
+    ssl: {
+        rejectUnauthorized: false
     }
-}
+});
+
+// Test database connection
+pool.connect((err, client, release) => {
+    if (err) {
+        console.error("❌ Database connection error:", err.message);
+    } else {
+        console.log("✅ Connected to PostgreSQL Database");
+        release();
+    }
+});
 
 // ===== TEST ENDPOINTS =====
 app.get("/test", (req, res) => {
-    res.json({ message: "Server is running!", dbConnected: pool !== null });
+    res.json({ message: "Server is running!", dbConnected: true });
 });
 
 app.get("/health", (req, res) => {
     res.json({ 
         status: 'OK', 
-        dbConnected: pool !== null,
+        dbConnected: true,
         timestamp: new Date().toISOString()
     });
 });
 
+// ===== CREATE TABLES IF NOT EXISTS =====
+async function createTables() {
+    try {
+        // Create ServiceSeekers table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS serviceseekers (
+                id SERIAL PRIMARY KEY,
+                fullname VARCHAR(100) NOT NULL,
+                surname VARCHAR(100) NOT NULL,
+                email VARCHAR(100) UNIQUE NOT NULL,
+                passwordhash VARCHAR(255) NOT NULL,
+                serviceneeded TEXT,
+                studentnumber VARCHAR(50)
+            )
+        `);
+        console.log("✅ ServiceSeekers table ready");
+
+        // Create ServiceProviders table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS serviceproviders (
+                id SERIAL PRIMARY KEY,
+                fullname VARCHAR(100) NOT NULL,
+                surname VARCHAR(100) NOT NULL,
+                email VARCHAR(100) UNIQUE NOT NULL,
+                studentnumber VARCHAR(50),
+                passwordhash VARCHAR(255) NOT NULL,
+                servicetype VARCHAR(100),
+                bio TEXT,
+                hourlyrate DECIMAL(10,2),
+                campus VARCHAR(100),
+                availability VARCHAR(200),
+                rating DECIMAL(3,2) DEFAULT 0
+            )
+        `);
+        console.log("✅ ServiceProviders table ready");
+
+        // Create Bookings table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS bookings (
+                id SERIAL PRIMARY KEY,
+                seekerid INTEGER REFERENCES serviceseekers(id),
+                providerid INTEGER REFERENCES serviceproviders(id),
+                servicedate TIMESTAMP,
+                status VARCHAR(50) DEFAULT 'Pending',
+                createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+        console.log("✅ Bookings table ready");
+    } catch (err) {
+        console.error("Error creating tables:", err);
+    }
+}
+
+// Call create tables
+createTables();
+
 // ===== SIGNUP ENDPOINT (Service Seeker) =====
 app.post("/signup", async (req, res) => {
     const { fullName, surname, email, password, servicesNeeded, studentNumber } = req.body;
-    
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
     
     if (!fullName || !surname || !email || !password) {
         return res.status(400).json({ success: false, message: "All fields are required" });
     }
     
     try {
-        const checkUser = await pool.request()
-            .input('email', sql.NVarChar, email)
-            .query("SELECT * FROM ServiceSeekers WHERE Email = @email");
+        // Check if user exists
+        const checkUser = await pool.query(
+            "SELECT * FROM serviceseekers WHERE email = $1",
+            [email]
+        );
         
-        if (checkUser.recordset.length > 0) {
+        if (checkUser.rows.length > 0) {
             return res.status(400).json({ success: false, message: "User already exists" });
         }
         
         const hashedPassword = await bcrypt.hash(password, 10);
         
-        await pool.request()
-            .input('fullName', sql.NVarChar, fullName)
-            .input('surname', sql.NVarChar, surname)
-            .input('email', sql.NVarChar, email)
-            .input('password', sql.NVarChar, hashedPassword)
-            .input('servicesNeeded', sql.NVarChar, servicesNeeded || null)
-            .input('studentNumber', sql.NVarChar, studentNumber || null)
-            .query(`INSERT INTO ServiceSeekers (FullName, Surname, Email, PasswordHash, ServiceNeeded, StudentNumber) VALUES (@fullName, @surname, @email, @password, @servicesNeeded, @studentNumber)`);
+        await pool.query(
+            `INSERT INTO serviceseekers (fullname, surname, email, passwordhash, serviceneeded, studentnumber) 
+             VALUES ($1, $2, $3, $4, $5, $6)`,
+            [fullName, surname, email, hashedPassword, servicesNeeded || null, studentNumber || null]
+        );
         
         res.json({ success: true, message: "Sign-up successful!" });
     } catch (err) {
@@ -117,33 +146,30 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
-    
     try {
-        const result = await pool.request()
-            .input('email', sql.NVarChar, email)
-            .query("SELECT * FROM ServiceSeekers WHERE Email = @email");
+        const result = await pool.query(
+            "SELECT * FROM serviceseekers WHERE email = $1",
+            [email]
+        );
         
-        if (result.recordset.length === 0) {
+        if (result.rows.length === 0) {
             return res.status(401).json({ success: false, message: "Invalid credentials" });
         }
         
-        const user = result.recordset[0];
-        const passwordMatch = await bcrypt.compare(password, user.PasswordHash);
+        const user = result.rows[0];
+        const passwordMatch = await bcrypt.compare(password, user.passwordhash);
         
         if (passwordMatch) {
             res.json({ 
                 success: true, 
                 message: "Login successful!", 
                 user: {
-                    id: user.Id,
-                    fullName: user.FullName,
-                    surname: user.Surname,
-                    email: user.Email,
-                    servicesNeeded: user.ServiceNeeded,
-                    studentNumber: user.StudentNumber
+                    id: user.id,
+                    fullName: user.fullname,
+                    surname: user.surname,
+                    email: user.email,
+                    servicesNeeded: user.serviceneeded,
+                    studentNumber: user.studentnumber
                 }
             });
         } else {
@@ -159,20 +185,17 @@ app.post("/login", async (req, res) => {
 app.get("/user/:email", async (req, res) => {
     const { email } = req.params;
     
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
-    
     try {
-        const result = await pool.request()
-            .input('email', sql.NVarChar, email)
-            .query("SELECT Id, FullName, Surname, Email, StudentNumber, ServiceNeeded FROM ServiceSeekers WHERE Email = @email");
+        const result = await pool.query(
+            "SELECT id, fullname, surname, email, studentnumber, serviceneeded FROM serviceseekers WHERE email = $1",
+            [email]
+        );
         
-        if (result.recordset.length === 0) {
+        if (result.rows.length === 0) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
         
-        res.json({ success: true, user: result.recordset[0] });
+        res.json({ success: true, user: result.rows[0] });
     } catch (err) {
         console.error("Error fetching user:", err);
         res.status(500).json({ success: false, message: "Failed to fetch user" });
@@ -181,33 +204,35 @@ app.get("/user/:email", async (req, res) => {
 
 // ===== GET ALL PROVIDERS =====
 app.get("/providers", async (req, res) => {
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
-    
     try {
-        const result = await pool.request()
-            .query("SELECT Id, FullName, Surname, Email, ServiceType, Bio, Rating, Campus, Availability, HourlyRate FROM ServiceProviders");
-        res.json({ success: true, providers: result.recordset });
+        const result = await pool.query(
+            "SELECT id, fullname, surname, email, servicetype, bio, rating, campus, availability, hourlyrate FROM serviceproviders"
+        );
+        res.json({ success: true, providers: result.rows });
     } catch (err) {
         console.error("Error fetching providers:", err);
         res.status(500).json({ success: false, message: "Failed to fetch providers" });
     }
 });
 
-// ===== GET ALL USERS =====
-app.get("/users", async (req, res) => {
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
+// ===== GET PROVIDER BY EMAIL =====
+app.get("/provider/:email", async (req, res) => {
+    const { email } = req.params;
     
     try {
-        const result = await pool.request()
-            .query("SELECT Id, FullName, Surname, Email, ServiceNeeded, StudentNumber FROM ServiceSeekers");
-        res.json({ success: true, users: result.recordset });
+        const result = await pool.query(
+            "SELECT id, fullname, surname, email, studentnumber, servicetype, bio, hourlyrate, campus, availability, rating FROM serviceproviders WHERE email = $1",
+            [email]
+        );
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Provider not found" });
+        }
+        
+        res.json({ success: true, provider: result.rows[0] });
     } catch (err) {
-        console.error("Error fetching users:", err);
-        res.status(500).json({ success: false, message: "Failed to fetch users" });
+        console.error("Error fetching provider:", err);
+        res.status(500).json({ success: false, message: "Failed to fetch provider" });
     }
 });
 
@@ -215,38 +240,27 @@ app.get("/users", async (req, res) => {
 app.post("/provider/signup", async (req, res) => {
     const { fullName, surname, email, studentNumber, password, serviceType, bio, hourlyRate, campus, availability } = req.body;
     
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
-    
     if (!fullName || !surname || !email || !password || !serviceType) {
         return res.status(400).json({ success: false, message: "All required fields must be filled" });
     }
     
     try {
-        const checkUser = await pool.request()
-            .input('email', sql.NVarChar, email)
-            .query("SELECT * FROM ServiceProviders WHERE Email = @email");
+        const checkUser = await pool.query(
+            "SELECT * FROM serviceproviders WHERE email = $1",
+            [email]
+        );
         
-        if (checkUser.recordset.length > 0) {
+        if (checkUser.rows.length > 0) {
             return res.status(400).json({ success: false, message: "Provider already exists with this email" });
         }
         
         const hashedPassword = await bcrypt.hash(password, 10);
         
-        await pool.request()
-            .input('fullName', sql.NVarChar, fullName)
-            .input('surname', sql.NVarChar, surname)
-            .input('email', sql.NVarChar, email)
-            .input('studentNumber', sql.NVarChar, studentNumber || null)
-            .input('password', sql.NVarChar, hashedPassword)
-            .input('serviceType', sql.NVarChar, serviceType)
-            .input('bio', sql.NVarChar, bio || null)
-            .input('hourlyRate', sql.Decimal, hourlyRate || null)
-            .input('campus', sql.NVarChar, campus || null)
-            .input('availability', sql.NVarChar, availability || null)
-            .query(`INSERT INTO ServiceProviders (FullName, Surname, Email, StudentNumber, PasswordHash, ServiceType, Bio, HourlyRate, Campus, Availability, Rating) 
-                    VALUES (@fullName, @surname, @email, @studentNumber, @password, @serviceType, @bio, @hourlyRate, @campus, @availability, 0)`);
+        await pool.query(
+            `INSERT INTO serviceproviders (fullname, surname, email, studentnumber, passwordhash, servicetype, bio, hourlyrate, campus, availability, rating) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 0)`,
+            [fullName, surname, email, studentNumber || null, hashedPassword, serviceType, bio || null, hourlyRate || null, campus || null, availability || null]
+        );
         
         res.json({ success: true, message: "Service provider signup successful!" });
     } catch (err) {
@@ -255,109 +269,17 @@ app.post("/provider/signup", async (req, res) => {
     }
 });
 
-// ===== ADD SERVICE (for existing providers) =====
-app.post("/add-service", async (req, res) => {
-    const { providerEmail, title, category, description, price, priceType, campus, availability } = req.body;
-    
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
-    
-    try {
-        const checkProvider = await pool.request()
-            .input('email', sql.NVarChar, providerEmail)
-            .query("SELECT * FROM ServiceProviders WHERE Email = @email");
-        
-        if (checkProvider.recordset.length === 0) {
-            return res.status(404).json({ success: false, message: "Provider not found" });
-        }
-        
-        await pool.request()
-            .input('email', sql.NVarChar, providerEmail)
-            .input('serviceType', sql.NVarChar, category)
-            .input('bio', sql.NVarChar, description)
-            .input('hourlyRate', sql.Decimal, price)
-            .input('campus', sql.NVarChar, campus || null)
-            .input('availability', sql.NVarChar, availability || null)
-            .query(`UPDATE ServiceProviders 
-                    SET ServiceType = @serviceType, Bio = @bio, HourlyRate = @hourlyRate, 
-                        Campus = @campus, Availability = @availability
-                    WHERE Email = @email`);
-        
-        res.json({ success: true, message: "Service published successfully!" });
-    } catch (err) {
-        console.error("Error adding service:", err);
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
-
-// ===== PROVIDER DASHBOARD ENDPOINTS =====
-
-// Get provider by email
-app.get("/provider/:email", async (req, res) => {
-    const { email } = req.params;
-    
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
-    
-    try {
-        const result = await pool.request()
-            .input('email', sql.NVarChar, email)
-            .query("SELECT Id, FullName, Surname, Email, StudentNumber, ServiceType, Bio, HourlyRate, Campus, Availability, Rating FROM ServiceProviders WHERE Email = @email");
-        
-        if (result.recordset.length === 0) {
-            return res.status(404).json({ success: false, message: "Provider not found" });
-        }
-        
-        res.json({ success: true, provider: result.recordset[0] });
-    } catch (err) {
-        console.error("Error fetching provider:", err);
-        res.status(500).json({ success: false, message: "Failed to fetch provider" });
-    }
-});
-
-// Get provider's services
-app.get("/provider-services/:email", async (req, res) => {
-    const { email } = req.params;
-    
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
-    
-    try {
-        const result = await pool.request()
-            .input('email', sql.NVarChar, email)
-            .query("SELECT Id, ServiceType, Bio, HourlyRate, Campus, Availability, Rating FROM ServiceProviders WHERE Email = @email");
-        
-        res.json({ success: true, services: result.recordset });
-    } catch (err) {
-        console.error("Error fetching provider services:", err);
-        res.status(500).json({ success: false, message: "Failed to fetch services" });
-    }
-});
-
-// Update provider profile
+// ===== UPDATE PROVIDER PROFILE =====
 app.put("/provider/update", async (req, res) => {
     const { email, fullName, surname, bio, hourlyRate, campus, availability } = req.body;
     
-    if (!pool) {
-        return res.status(503).json({ success: false, message: "Database not ready" });
-    }
-    
     try {
-        await pool.request()
-            .input('email', sql.NVarChar, email)
-            .input('fullName', sql.NVarChar, fullName)
-            .input('surname', sql.NVarChar, surname)
-            .input('bio', sql.NVarChar, bio || null)
-            .input('hourlyRate', sql.Decimal, hourlyRate || null)
-            .input('campus', sql.NVarChar, campus || null)
-            .input('availability', sql.NVarChar, availability || null)
-            .query(`UPDATE ServiceProviders 
-                    SET FullName = @fullName, Surname = @surname, Bio = @bio, 
-                        HourlyRate = @hourlyRate, Campus = @campus, Availability = @availability
-                    WHERE Email = @email`);
+        await pool.query(
+            `UPDATE serviceproviders 
+             SET fullname = $1, surname = $2, bio = $3, hourlyrate = $4, campus = $5, availability = $6
+             WHERE email = $7`,
+            [fullName, surname, bio || null, hourlyRate || null, campus || null, availability || null, email]
+        );
         
         res.json({ success: true, message: "Profile updated successfully!" });
     } catch (err) {
@@ -366,17 +288,25 @@ app.put("/provider/update", async (req, res) => {
     }
 });
 
-// ===== START SERVER =====
-const PORT = 3000;
-app.listen(PORT, "0.0.0.0", () => {
-    console.log(`✅ Server running on http://localhost:${PORT}`);
-    console.log(`📝 Test: GET http://localhost:${PORT}/test`);
-    console.log(`📝 Signup: POST http://localhost:${PORT}/signup`);
-    console.log(`📝 Login: POST http://localhost:${PORT}/login`);
-    console.log(`📝 Providers: GET http://localhost:${PORT}/providers`);
-    console.log(`📝 Provider Dashboard: GET http://localhost:${PORT}/provider/:email`);
-    console.log(`📝 Dashboard: http://localhost:${PORT}/dashboard.html`);
+// ===== GET ALL USERS =====
+app.get("/users", async (req, res) => {
+    try {
+        const result = await pool.query(
+            "SELECT id, fullname, surname, email, serviceneeded, studentnumber FROM serviceseekers"
+        );
+        res.json({ success: true, users: result.rows });
+    } catch (err) {
+        console.error("Error fetching users:", err);
+        res.status(500).json({ success: false, message: "Failed to fetch users" });
+    }
 });
 
-// ===== INITIATE DATABASE CONNECTION =====
-connectToDatabase();
+// ===== START SERVER =====
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`✅ Server running on port ${PORT}`);
+    console.log(`📝 Test: GET /test`);
+    console.log(`📝 Signup: POST /signup`);
+    console.log(`📝 Login: POST /login`);
+    console.log(`📝 Providers: GET /providers`);
+});
