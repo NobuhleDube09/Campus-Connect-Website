@@ -7,9 +7,6 @@ const path = require("path");
 const app = express();
 app.use(bodyParser.json());
 
-// ===== SERVE STATIC FRONTEND FILES (HTML, CSS, JS) =====
-app.use(express.static(__dirname));
-
 // ===== CORS MIDDLEWARE =====
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -196,7 +193,7 @@ app.get("/user/:email", async (req, res) => {
     }
 });
 
-// ===== FIXED GET ALL PROVIDERS ENDPOINT =====
+// ===== GET ALL PROVIDERS =====
 app.get("/providers", async (req, res) => {
     try {
         const result = await pool.query(
