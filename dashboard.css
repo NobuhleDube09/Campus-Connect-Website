@@ -1,4 +1,4 @@
-/* ===== GLOBAL ===== */
+/* GLOBAL  */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +12,7 @@ body {
   color: #1e293b;
 }
 
-/* ===== HEADER ===== */
+/*  HEADER */
 .dashboard-header {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -75,7 +75,7 @@ body {
   border-radius: 50%;
 }
 
-/* ===== LOGOUT BUTTON ===== */
+/*  LOGOUT BUTTON  */
 .btn-logout {
   background: linear-gradient(135deg, #f7b63d, #e5a020);
   color: white;
@@ -226,7 +226,7 @@ body {
   text-align: center;
 }
 
-/* ===== MAIN CONTAINER ===== */
+/*  MAIN CONTAINER  */
 .dashboard-container {
   display: flex;
   gap: 24px;
@@ -236,7 +236,7 @@ body {
   transition: 0.3s;
 }
 
-/* ===== CENTER PANEL ===== */
+/*  CENTER PANEL  */
 .dashboard-center {
   flex: 2.5;
   background: white;
@@ -497,7 +497,7 @@ body {
   box-shadow: 0 6px 20px rgba(46, 185, 151, 0.4);
 }
 
-/* ===== RIGHT PANEL ===== */
+/*  RIGHT PANEL  */
 .dashboard-right {
   flex: 1.2;
   display: flex;
@@ -592,7 +592,7 @@ body {
   color: #2eb997;
 }
 
-/* ===== FOOTER ===== */
+/*  FOOTER  */
 .dashboard-footer {
   display: flex;
   justify-content: center;
@@ -658,14 +658,14 @@ body {
   cursor: pointer;
 }
 
-/* ===== LOADING & ERROR ===== */
+/*  LOADING & ERROR  */
 .loading, .error, .no-results {
   text-align: center;
   padding: 40px;
   color: #64748b;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/*  RESPONSIVE DESIGN  */
 @media (max-width: 1024px) {
   .dashboard-container {
     flex-direction: column;

@@ -1,9 +1,20 @@
+<<<<<<< HEAD
 // findServices.js - Updated with monthly rates and fixed NaN issues
 
 // ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
 const API_URL = 'http://172.16.16.77:3000';
+=======
 
-// ===== Global Variables =====
+
+//  API CONFIGURATION 
+const API_URL = 'https://campus-connect-api-g1jz.onrender.com'; 
+
+// Global Variables 
+
+const API_URL = 'https://campus-connect-api-g1jz.onrender.com';
+>>>>>>> 71d3117178fe3470f223321af3f7ceb09c04e866
+
+//  Global Variables
 let allServices = [];
 let currentFilters = {
     search: '',
@@ -12,7 +23,56 @@ let currentFilters = {
     category: 'all'
 };
 
-// ===== Load Services on Page Load =====
+
+//  Check if user is logged in 
+function isUserLoggedIn() {
+    const userEmail = localStorage.getItem('userEmail');
+    const providerEmail = localStorage.getItem('providerEmail');
+    return userEmail !== null || providerEmail !== null;
+}
+
+//  Get current user email 
+function getCurrentUserEmail() {
+    return localStorage.getItem('userEmail') || localStorage.getItem('providerEmail');
+}
+
+//  Test backend connection first 
+async function testBackendConnection() {
+    try {
+        console.log('Testing connection to:', `${API_URL}/test`);
+        const response = await fetch(`${API_URL}/test`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('✅ Backend connected:', data);
+            return true;
+        }
+    } catch (error) {
+        console.error('❌ Backend connection failed:', error);
+        return false;
+    }
+    return false;
+}
+
+//  Show connection error message 
+function showConnectionError() {
+    const grid = document.getElementById('servicesGrid');
+    grid.innerHTML = `
+        <div class="no-results">
+            <i class="fas fa-server" style="font-size: 64px; color: #ef4444;"></i>
+            <h3>Cannot Connect to Server</h3>
+            <p>Unable to reach the backend server. Please make sure:</p>
+            <ul style="text-align: left; display: inline-block; margin-top: 15px; color: #64748b;">
+                <li>✓ The backend server is running on Render</li>
+                <li>✓ Your internet connection is active</li>
+                <li>✓ The API URL is correct: ${API_URL}</li>
+            </ul>
+            <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #2eb997; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                <i class="fas fa-sync-alt"></i> Retry Connection
+            </button>
+        </div>
+    `;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Find Services page loaded');
     await loadServices();
@@ -20,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupCategoryFilters();
 });
 
-// ===== Setup Event Listeners =====
+//  Setup Event Listeners 
 function setupEventListeners() {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
@@ -35,7 +95,7 @@ function setupEventListeners() {
     if (priceFilter) priceFilter.addEventListener('change', () => searchServices());
 }
 
-// ===== Setup Category Filters =====
+//  Setup Category Filters 
 function setupCategoryFilters() {
     const categoryChips = document.querySelectorAll('.category-chip');
     categoryChips.forEach(chip => {
@@ -48,6 +108,7 @@ function setupCategoryFilters() {
     });
 }
 
+<<<<<<< HEAD
 // ===== Calculate Monthly Rate from Hourly =====
 function calculateMonthlyRate(hourlyRate) {
     if (!hourlyRate || hourlyRate === 'NaN' || isNaN(parseFloat(hourlyRate))) {
@@ -66,6 +127,9 @@ function formatCurrency(amount) {
 }
 
 // ===== Load Services from Backend =====
+=======
+//  Load Services from Backend 
+>>>>>>> 71d3117178fe3470f223321af3f7ceb09c04e866
 async function loadServices() {
     try {
         showLoading();
@@ -91,7 +155,7 @@ async function loadServices() {
     }
 }
 
-// ===== Filter and Display Services =====
+// Filter and Display Services 
 function filterAndDisplayServices() {
     let filtered = [...allServices];
     
@@ -142,7 +206,7 @@ function filterAndDisplayServices() {
     updateResultsCount(filtered.length);
 }
 
-// ===== Sort Services =====
+//  Sort Services 
 function sortServicesList(services) {
     const sortBy = document.getElementById('sortSelect')?.value || 'rating';
     
@@ -163,7 +227,7 @@ function sortServices() {
     filterAndDisplayServices();
 }
 
-// ===== Display Services in Grid =====
+// Display Services in Grid 
 function displayServices(services) {
     const grid = document.getElementById('servicesGrid');
     
@@ -226,7 +290,7 @@ function displayServices(services) {
     `}).join('');
 }
 
-// ===== Show Service Detail Modal =====
+//  Show Service Detail Modal 
 function showServiceDetail(service) {
     const modal = document.getElementById('serviceModal');
     const modalContent = document.getElementById('modalContent');
@@ -293,7 +357,7 @@ function closeServiceModal() {
     if (modal) modal.style.display = 'none';
 }
 
-// ===== Request Booking =====
+//  Request Booking 
 function requestBooking(providerId) {
     const userEmail = localStorage.getItem('userEmail');
     const providerEmail = localStorage.getItem('providerEmail');
@@ -313,7 +377,7 @@ function requestBooking(providerId) {
     closeServiceModal();
 }
 
-// ===== Search Functions =====
+//  Search Functions 
 function searchServices() {
     currentFilters.search = document.getElementById('searchInput').value;
     currentFilters.campus = document.getElementById('campusFilter').value;
@@ -343,7 +407,7 @@ function resetFilters() {
     filterAndDisplayServices();
 }
 
-// ===== Helper Functions =====
+//  Helper Functions 
 function updateResultsCount(count) {
     const resultsCount = document.getElementById('resultsCount');
     if (resultsCount) {
@@ -388,3 +452,88 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
+
+function filterServices() {
+  const input = document.getElementById("searchInput").value.toLowerCase();
+  const services = document.getElementById("servicesGrid").getElementsByClassName("service");
+  let found = false;
+
+  for (let i = 0; i < services.length; i++) {
+    const title = services[i].getElementsByTagName("h3")[0].innerText.toLowerCase();
+    if (title.includes(input)) {
+      services[i].style.display = "";
+      found = true;
+    } else {
+      services[i].style.display = "none";
+    }
+  }
+
+  
+  let message = document.getElementById("notFoundMessage");
+  if (!message) {
+    message = document.createElement("p");
+    message.id = "notFoundMessage";
+    message.style.textAlign = "center";
+    message.style.color = "#F97316"; 
+    message.style.fontWeight = "600";
+    message.style.marginTop = "20px";
+    document.querySelector(".services").appendChild(message);
+  }
+
+  if (!found && input.trim() !== "") {
+    message.textContent = `No services found for "${input}".`;
+  } else {
+    message.textContent = "";
+  }
+}
+// Simulated login state
+let isLoggedIn = false;
+let userRole = null; // "serviceSeeker"
+
+// Handle "View More" clicks
+function handleViewMore(serviceName) {
+  if (!isLoggedIn || userRole !== "serviceSeeker") {
+    showLoginPopup(serviceName);
+  } else {
+    window.location.href = `dashboard.html?service=${serviceName}`;
+  }
+}
+
+// Create and show popup
+function showLoginPopup(serviceName) {
+  const modal = document.createElement("div");
+  modal.className = "popup-overlay"; // match CSS
+  modal.innerHTML = `
+    <div class="popup-box">
+      <h3>Continue to Login</h3>
+      <p>You need to log in or sign up as a Service Seeker to view more details.</p>
+      <div class="popup-actions">
+        <button id="loginBtn">Login</button>
+        <button id="signupBtn">Sign Up</button>
+        <button id="cancelBtn">Cancel</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Button actions
+  document.getElementById("loginBtn").onclick = () => {
+    window.location.href = `seeker.html?mode=login&redirect=dashboard.html&service=${serviceName}`;
+  };
+  document.getElementById("signupBtn").onclick = () => {
+    window.location.href = `seeker.html?mode=signup&redirect=dashboard.html&service=${serviceName}`;
+  };
+  document.getElementById("cancelBtn").onclick = () => {
+    document.body.removeChild(modal);
+  };
+}
+
+// Attach event listeners
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".view-more-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const service = btn.dataset.service;
+      handleViewMore(service);
+    });
+  });
+});

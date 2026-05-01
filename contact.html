@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Campus Connect | Contact Section with Header</title>
+  <link rel="stylesheet" href="contact.css">
+  <!-- Google Fonts & Font Awesome for icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+</head>
+<body>
+
+<!-- HEADER (exactly as requested) -->
+<header class="help-header">
+  <div class="logo">
+    <h1><i class="fas fa-graduation-cap"></i> Campus Connect</h1>
+  </div>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="#" onclick="showAlert('About')">About</a>
+    <a href="#" onclick="showAlert('How It Works')">How It Works</a>
+    <a href="#" class="active">Contact</a>
+  </nav>
+</header>
+
+<!-- MAIN CONTACT SECTION (enhanced Campus Connect style) -->
+<div class="contact-section">
+  <div class="contact-grid">
+    <!-- LEFT COLUMN: CONTACT FORM -->
+    <div class="form-col">
+      <h2>
+        <span>📬</span> Reach out
+      </h2>
+      <div class="tagline">
+        🎓 Got feedback, event idea, or need help? We’re all ears — and quick replies.
+      </div>
+
+      <form id="campusContactForm" class="contact-form">
+        <div class="input-group">
+          <label><i>👤</i> Full name</label>
+          <input type="text" id="fullName" placeholder="e.g., Angel Moyo" required>
+        </div>
+        <div class="input-group">
+          <label><i>📧</i> Student email</label>
+          <input type="email" id="studentEmail" placeholder="student@university.ac.za" required>
+        </div>
+        <div class="input-group">
+          <label><i>📂</i> Subject</label>
+          <select id="subjectSelect">
+            <option value="General inquiry">📌 General inquiry</option>
+            <option value="Campus event feedback">🎉 Campus event feedback</option>
+            <option value="Service issue">⚙️ Service issue</option>
+            <option value="Partnership">🤝 Partnership / student clubs</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label><i>💬</i> Message</label>
+          <textarea id="messageBox" placeholder="Tell us what you need, ask a question, or share feedback..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">
+          ✨ Send message <span>→</span>
+        </button>
+        <div id="formConfirmation" class="confirmation-msg">
+          ✅ <span id="confirmText">Thanks! We’ll get back to you soon (usually within 24h).</span>
+        </div>
+      </form>
+    </div>
+
+    <!-- RIGHT COLUMN: DIRECT INFO + SOCIAL + MAP + HOURS -->
+    <div class="info-col">
+      <!-- Direct Contact card with campus icons -->
+      <div class="direct-card">
+        <h3><span>🎓📞</span> Direct contact</h3>
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div><a href="mailto:hello@campusconnect.com">hello@campusconnect.com</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div><a href="tel:+27123456789">+27 12 345 6789</a> <span style="font-size:0.75rem; background:#eef2f6; padding:2px 8px; border-radius:30px;">WhatsApp ready</span></div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📍🏛️</div>
+            <div class="address-block">
+              Student Center<br>
+              APB Campus, University of Johannesburg
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social & student community groups -->
+      <div class="social-card">
+        <h3><span>🌐📱</span> Student community & social</h3>
+        <div class="social-links">
+          <a href="#" class="social-icon whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp Group →</a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i> Instagram</a>
+          <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i> X (Twitter)</a>
+        </div>
+        
+      </div>
+
+      <!-- Business hours & expected response time -->
+      <div class="hours-card">
+        <h3><span>⏰</span> We're here for you</h3>
+        <p><span>📅</span> Mon–Fri: 9:00 – 17:00 (SAST)</p>
+        <p><span>💡</span> Evenings & weekends: monitored within 24h</p>
+        <p><span>⚡</span> Expected response time: <strong>under 24 hours</strong> (exam weeks? still fast!)</p>
+      </div>
+
+      <!-- Map embed (campus location) -->
+      <div>
+      
+        <div class="map-wrapper">
+          <div class="map-placeholder">
+            <span>📍🏫</span>
+            <strong>Student Center Building</strong>
+            <span style="font-size: 0.7rem;">Google Map: 26.192° S, 28.030° E (APB Campus)</span>
+            <span style="font-size:0.7rem;">📍 Physical address available for meetings</span>
+          </div>
+        </div>
+        <p style="font-size:0.7rem; margin-top: 0.4rem; color:#5c6f87;">📍 <em>Come say hi! We're at student center.</em></p>
+      </div>
+    </div>
+  </div>
+  <footer>
+    🎓 Discover And Promote Student Skills On Campus. “We’d love to hear from you!”
+  </footer>
+</div>
+
+<script src="contact.js"></script>
+</body>
+</html>

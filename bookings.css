@@ -1,0 +1,265 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+        }
+
+        body {
+            background: #eef2f9;
+            padding: 24px;
+            min-height: 100vh;
+           
+        }
+
+        /* Provider Layout */
+        .provider-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        /* Header with provider identity */
+        .provider-header {
+            background: teal;
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 1px solid #2d4a55;
+        }
+
+        .provider-title h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .provider-title p {
+            color: #8daeb9;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .provider-badge {
+            background: #2f5e6e;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 28px 32px;
+            background: #ffffff;
+            border-bottom: 1px solid #e9edf2;
+        }
+
+        .stat-card-provider {
+            background: #f8fafd;
+            border-radius: 24px;
+            padding: 18px 20px;
+            border: 1px solid #eef2f8;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #5f8a98;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: orange;
+        }
+
+        /* Main content */
+        .main-dashboard {
+            padding: 0 32px 32px 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 24px 0 16px 0;
+            color: teal;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            background: #f9fbfd;
+            padding: 12px 16px;
+            border-radius: 60px;
+            align-items: center;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #3a6575;
+        }
+
+        .filter-btn.active-filter {
+            background: teal;
+            color: white;
+        }
+
+        .filter-btn:hover:not(.active-filter) {
+            background: orange;
+        }
+
+        /* Bookings Table (Desktop) */
+        .bookings-table-wrapper {
+            overflow-x: auto;
+            border-radius: 24px;
+            border: 1px solid #eef2f8;
+            background: white;
+        }
+
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .bookings-table th {
+            text-align: left;
+            padding: 18px 16px;
+            background: #f9fbfe;
+            color: teal;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .bookings-table td {
+            padding: 16px;
+            border-bottom: 1px solid #f0f4f9;
+            vertical-align: middle;
+        }
+
+        .booking-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: #e0f2e9;
+            color: #1f6e43;
+        }
+
+        .status-pending {
+            background: #fff1df;
+            color: orange;
+        }
+
+        .status-completed {
+            background: #e1ecf7;
+            color: teal;
+        }
+
+        .status-cancelled {
+            background: #fee9e9;
+            color: #bc3f3f;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid #cbdde6;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 6px;
+            transition: 0.1s;
+        }
+
+        .action-btn:hover {
+            background: #eef2fa;
+        }
+
+        .badge-provider {
+            background: #eef2ff;
+            border-radius: 20px;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* empty state */
+        .empty-bookings {
+            text-align: center;
+            padding: 60px 20px;
+            background: #fafcff;
+            border-radius: 24px;
+            color: #708c96;
+        }
+
+        /* responsive */
+        @media (max-width: 780px) {
+            body { padding: 12px; }
+            .provider-header { flex-direction: column; align-items: flex-start; }
+            .stats-row { padding: 20px; }
+            .main-dashboard { padding: 0 20px 20px 20px; }
+            .bookings-table th, .bookings-table td { padding: 12px 8px; }
+        }
+
+        /* toast */
+        .toast-provider {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1e2f38;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 14px;
+            z-index: 1100;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+        }
+        .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #f97316;
+    text-decoration: none;
+    margin: 12px 0 20px;
+    transition: all 0.2s ease;
+}
+
+.back-link:hover {
+    color: #ea580c;
+    transform: translateX(-5px);
+}
