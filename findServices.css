@@ -143,7 +143,7 @@ body {
 
 .search-btn {
     padding: 15px 30px;
-    background: linear-gradient(135deg,#00cc7e44, #00d9ff);
+    background: linear-gradient(135deg, #00cc7e44, #00d9ff);
     color: white;
     border: none;
     border-radius: 50px;
@@ -177,7 +177,7 @@ body {
 }
 
 .category-chip:hover, .category-chip.active {
-    background: linear-gradient(135deg,#00cc7e44, #00d9ff);
+    background: linear-gradient(135deg, #00cc7e44, #00d9ff);
     color: white;
     transform: translateY(-2px);
 }
@@ -202,6 +202,17 @@ body {
     color: #64748b;
     font-size: 14px;
     font-weight: 500;
+}
+
+.sort-options {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sort-options label {
+    color: #64748b;
+    font-size: 14px;
 }
 
 .sort-options select {
@@ -470,6 +481,32 @@ body {
     }
 }
 
+/* ===== RESET FILTERS BUTTON ===== */
+.reset-filters {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.reset-btn {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 8px 20px;
+    border-radius: 30px;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.reset-btn i {
+    margin-right: 8px;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .header {
@@ -492,5 +529,10 @@ body {
     
     .category-filters {
         justify-content: center;
+    }
+    
+    .results-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

@@ -53,10 +53,10 @@
                     <i class="fas fa-tag"></i>
                     <select id="priceFilter">
                         <option value="">All Prices</option>
-                        <option value="0-100">Under R100</option>
-                        <option value="100-300">R100 - R300</option>
-                        <option value="300-500">R300 - R500</option>
-                        <option value="500+">R500+</option>
+                        <option value="0-1000">R0 - R500 / month</option>
+                        <option value="1000-3000">R500 - R1,500 / month</option>
+                        <option value="3000-5000">R1,500 - R2,000 / month</option>
+                        <option value="5000+">R2,000+ / month</option>
                     </select>
                 </div>
                 <button class="search-btn" onclick="searchServices()">
@@ -75,6 +75,12 @@
                 <button class="category-chip" data-category="Music Lessons">🎵 Music Lessons</button>
                 <button class="category-chip" data-category="Fitness Training">💪 Fitness Training</button>
             </div>
+            
+            <div class="reset-filters">
+                <button class="reset-btn" onclick="resetFilters()">
+                    <i class="fas fa-undo-alt"></i> Reset All Filters
+                </button>
+            </div>
         </div>
     </section>
 
@@ -83,11 +89,12 @@
         <div class="results-header">
             <div class="results-count" id="resultsCount">Loading services...</div>
             <div class="sort-options">
+                <label><i class="fas fa-sort-amount-down"></i></label>
                 <select id="sortSelect" onchange="sortServices()">
-                    <option value="rating">Sort by: Highest Rated</option>
-                    <option value="price-low">Sort by: Price (Low to High)</option>
-                    <option value="price-high">Sort by: Price (High to Low)</option>
-                    <option value="name">Sort by: Name A-Z</option>
+                    <option value="rating">Highest Rated</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name">Name A-Z</option>
                 </select>
             </div>
         </div>

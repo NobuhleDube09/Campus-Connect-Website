@@ -1,5 +1,6 @@
 // ===== API CONFIGURATION =====
-const API_URL = 'https://campus-connect-api-g1jz.onrender.com';
+// Use your local backend
+const API_URL = 'http://172.16.16.77:3000';
 
 function openModal() {
     document.getElementById("signupModal").style.display = "block";
@@ -21,140 +22,214 @@ function closeProviderModal() {
     document.getElementById("providerResponseMessage").innerText = "";
 }
 
-// ===== HANDLE SERVICE SEEKER SIGN UP =====
-document.getElementById("popupSignupForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
-    
-    const fullName = document.getElementById("fullName").value;
-    const surname = document.getElementById("surname").value;
-    const email = document.getElementById("email").value;
-    const studentNumber = document.getElementById("studentNumber").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    const servicesNeeded = document.getElementById("servicesNeeded").value;
-    
-    const responseMsg = document.getElementById("responseMessage");
-    
-    if (password !== confirmPassword) {
-        responseMsg.style.color = "red";
-        responseMsg.innerText = "Passwords do not match!";
-        return;
-    }
-    
-    responseMsg.innerText = "Signing up...";
-    responseMsg.style.color = "blue";
-    
-    try {
-        const response = await fetch(`${API_URL}/signup`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-                fullName, 
-                surname, 
-                email, 
-                password, 
-                servicesNeeded,
-                studentNumber 
-            })
-        });
+// ===== HANDLE SERVICE SEEKER SIGN UP (with auto-login) =====
+const signupForm = document.getElementById("popupSignupForm");
+if (signupForm) {
+    signupForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
         
-        const data = await response.json();
+        const fullName = document.getElementById("fullName").value;
+        const surname = document.getElementById("surname").value;
+        const email = document.getElementById("email").value;
+        const studentNumber = document.getElementById("studentNumber").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const servicesNeeded = document.getElementById("servicesNeeded").value;
         
-        if (data.success) {
-            responseMsg.style.color = "green";
-            responseMsg.innerText = "Success! Redirecting to dashboard...";
-            setTimeout(() => {
-                closeModal();
-                window.location.href = `dashboard.html?email=${encodeURIComponent(email)}`;
-            }, 1500);
-        } else {
+        const responseMsg = document.getElementById("responseMessage");
+        
+        if (password !== confirmPassword) {
             responseMsg.style.color = "red";
-            responseMsg.innerText = data.message || "Signup failed";
+            responseMsg.innerText = "Passwords do not match!";
+            return;
         }
-    } catch (error) {
-        console.error("Error:", error);
-        responseMsg.style.color = "red";
-        responseMsg.innerText = "Error signing up. Please try again later.";
-    }
-});
+        
+        if (password.length < 6) {
+            responseMsg.style.color = "red";
+            responseMsg.innerText = "Password must be at least 6 characters!";
+            return;
+        }
+        
+        responseMsg.innerText = "Signing up...";
+        responseMsg.style.color = "blue";
+        
+        try {
+            // Step 1: Sign up
+            const signupResponse = await fetch(`${API_URL}/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    fullName, 
+                    surname, 
+                    email, 
+                    password, 
+                    servicesNeeded,
+                    studentNumber 
+                })
+            });
+            
+            const signupData = await signupResponse.json();
+            
+            if (!signupData.success) {
+                responseMsg.style.color = "red";
+                responseMsg.innerText = signupData.message || "Signup failed";
+                return;
+            }
+            
+            responseMsg.innerText = "Signup successful! Logging you in...";
+            
+            // Step 2: Automatically login
+            const loginResponse = await fetch(`${API_URL}/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+            
+            const loginData = await loginResponse.json();
+            
+            if (loginData.success) {
+                responseMsg.style.color = "green";
+                responseMsg.innerText = "✅ Login successful! Redirecting to dashboard...";
+                
+                // Store user info
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', loginData.user.fullName);
+                localStorage.setItem('userId', loginData.user.id);
+                
+                setTimeout(() => {
+                    closeModal();
+                    window.location.href = "dashboard.html";
+                }, 1500);
+            } else {
+                // Signup worked but auto-login failed
+                responseMsg.style.color = "orange";
+                responseMsg.innerText = "Account created! Please login manually.";
+                setTimeout(() => {
+                    closeModal();
+                    window.location.href = "login.html";
+                }, 1500);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            responseMsg.style.color = "red";
+            responseMsg.innerText = "❌ Cannot connect to server. Make sure your backend is running on localhost:3000";
+        }
+    });
+}
 
-// ===== HANDLE SERVICE PROVIDER SIGN UP =====
-document.getElementById("popupProviderForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
-    
-    const fullName = document.getElementById("providerFullName").value;
-    const surname = document.getElementById("providerSurname").value;
-    const email = document.getElementById("providerEmail").value;
-    const studentNumber = document.getElementById("providerStudentNumber").value;
-    const password = document.getElementById("providerPassword").value;
-    const confirmPassword = document.getElementById("providerConfirmPassword").value;
-    const serviceType = document.getElementById("serviceType").value;
-    const bio = document.getElementById("bio").value;
-    const hourlyRate = document.getElementById("hourlyRate").value;
-    const campus = document.getElementById("providerCampus").value;
-    const availability = document.getElementById("providerAvailability").value;
-    
-    const responseMsg = document.getElementById("providerResponseMessage");
-    
-    if (password !== confirmPassword) {
-        responseMsg.style.color = "red";
-        responseMsg.innerText = "Passwords do not match!";
-        return;
-    }
-    
-    responseMsg.innerText = "Signing up...";
-    responseMsg.style.color = "blue";
-    
-    try {
-        const response = await fetch(`${API_URL}/provider/signup`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-                fullName, 
-                surname, 
-                email, 
-                studentNumber, 
-                password, 
-                serviceType, 
-                bio, 
-                hourlyRate, 
-                campus, 
-                availability
-            })
-        });
+// ===== HANDLE SERVICE PROVIDER SIGN UP (with auto-login) =====
+const providerFormElement = document.getElementById("popupProviderForm");
+if (providerFormElement) {
+    providerFormElement.addEventListener("submit", async function(e) {
+        e.preventDefault();
         
-        const data = await response.json();
+        const fullName = document.getElementById("providerFullName").value;
+        const surname = document.getElementById("providerSurname").value;
+        const email = document.getElementById("providerEmail").value;
+        const studentNumber = document.getElementById("providerStudentNumber").value;
+        const password = document.getElementById("providerPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const serviceType = document.getElementById("serviceType").value;
+        const bio = document.getElementById("bio").value;
+        const hourlyRate = document.getElementById("hourlyRate").value;
+        const campus = document.getElementById("providerCampus").value;
+        const availability = document.getElementById("providerAvailability").value;
         
-        if (data.success) {
-            responseMsg.style.color = "green";
-            responseMsg.innerText = "Success! You are now a service provider!";
-            setTimeout(() => {
-                closeProviderModal();
-                window.location.href = `providerDashboard.html?email=${encodeURIComponent(email)}`;
-            }, 1500);
-        } else {
+        const responseMsg = document.getElementById("providerResponseMessage");
+        
+        if (password !== confirmPassword) {
             responseMsg.style.color = "red";
-            responseMsg.innerText = data.message || "Signup failed";
+            responseMsg.innerText = "Passwords do not match!";
+            return;
         }
-    } catch (error) {
-        console.error("Error:", error);
-        responseMsg.style.color = "red";
-        responseMsg.innerText = "Error signing up. Please try again later.";
-    }
-});
+        
+        if (password.length < 6) {
+            responseMsg.style.color = "red";
+            responseMsg.innerText = "Password must be at least 6 characters!";
+            return;
+        }
+        
+        responseMsg.innerText = "Signing up...";
+        responseMsg.style.color = "blue";
+        
+        try {
+            // Step 1: Sign up as provider
+            const signupResponse = await fetch(`${API_URL}/provider/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    fullName, 
+                    surname, 
+                    email, 
+                    studentNumber, 
+                    password, 
+                    serviceType, 
+                    bio, 
+                    hourlyRate: parseFloat(hourlyRate), 
+                    campus, 
+                    availability
+                })
+            });
+            
+            const signupData = await signupResponse.json();
+            
+            if (!signupData.success) {
+                responseMsg.style.color = "red";
+                responseMsg.innerText = signupData.message || "Signup failed";
+                return;
+            }
+            
+            responseMsg.innerText = "Provider account created! Logging you in...";
+            
+            // Step 2: Auto-login as provider
+            const loginResponse = await fetch(`${API_URL}/provider/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+            
+            const loginData = await loginResponse.json();
+            
+            if (loginData.success) {
+                responseMsg.style.color = "green";
+                responseMsg.innerText = "✅ Welcome! Redirecting to provider dashboard...";
+                
+                localStorage.setItem('providerEmail', email);
+                localStorage.setItem('providerName', loginData.provider.fullName);
+                
+                setTimeout(() => {
+                    closeProviderModal();
+                    window.location.href = "providerDashboard.html";
+                }, 1500);
+            } else {
+                responseMsg.style.color = "orange";
+                responseMsg.innerText = "Account created! Please login manually.";
+                setTimeout(() => {
+                    closeProviderModal();
+                    window.location.href = "login.html";
+                }, 1500);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            responseMsg.style.color = "red";
+            responseMsg.innerText = "❌ Cannot connect to server. Make sure backend is running.";
+        }
+    });
+}
 
 // ===== UI FUNCTIONS =====
 function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
-    const authButtons = document.querySelector('.auth-buttons');
-    if (navLinks) navLinks.classList.toggle('show');
-    if (authButtons) authButtons.classList.toggle('show');
+    if (navLinks) {
+        navLinks.classList.toggle('show');
+    }
 }
 
 function showAlert(message) {
     alert(message + " feature coming soon!");
 }
 
+// Close modals when clicking outside
 window.onclick = function(event) {
     const seekerModal = document.getElementById("signupModal");
     const providerModal = document.getElementById("providerModal");
@@ -167,13 +242,10 @@ window.onclick = function(event) {
 }
 
 // ===== CHATBOT FUNCTIONS =====
-let isChatOpen = false;
-
 function toggleChat() {
     const chatbot = document.getElementById('chatbot');
     if (!chatbot) return;
-    isChatOpen = !isChatOpen;
-    chatbot.classList.toggle('active');
+    chatbot.classList.toggle('minimized');
 }
 
 function sendChatMessage() {
@@ -228,23 +300,17 @@ function getBotResponse(message) {
     const msg = message.toLowerCase();
     
     if (msg.includes('sign up') || msg.includes('register')) {
-        return "📝 To sign up, click the 'Sign Up' button on the homepage. You'll need your student email and student ID number. It's free!";
+        return "📝 To sign up, click the 'Sign Up' button on the homepage. You'll need your email and password. It's free!";
     } else if (msg.includes('list') || msg.includes('service') || msg.includes('hustle')) {
-        return "💼 To list a service, click 'Start Your Hustle'. Fill in your service details, set your price, add photos, and publish! Students will see it immediately.";
+        return "💼 To list a service, click 'Start Your Hustle'. Fill in your service details, set your price, and publish!";
     } else if (msg.includes('payment') || msg.includes('pay')) {
-        return "💰 We accept Mobile Money, Credit/Debit cards, Bank Transfer, and Cash on pickup. All payments are secure and encrypted.";
+        return "💰 Payment options will be available soon. For now, arrange payment directly with the service provider.";
     } else if (msg.includes('cancel') || msg.includes('order')) {
-        return "❌ You can cancel an order within 24 hours from your 'My Orders' page. A full refund will be processed within 3-5 business days.";
+        return "❌ Contact the service provider directly to cancel or modify your booking.";
     } else if (msg.includes('password') || msg.includes('forgot')) {
-        return "🔑 If you forgot your password, click 'Forgot Password' on the login page. You'll receive a reset link in your email.";
-    } else if (msg.includes('profile') || msg.includes('update')) {
-        return "👤 Go to your Dashboard, click on your profile picture, and select 'Edit Profile' to update your information.";
-    } else if (msg.includes('rating') || msg.includes('review')) {
-        return "⭐ After a service is completed, you can rate the provider from 1-5 stars. Ratings help build trust in our community!";
-    } else if (msg.includes('how it works')) {
-        return "📚 Campus Connect connects students! Sign up, complete your profile, find or offer services, connect, and earn. Check the steps in our Help Center for more details!";
+        return "🔑 If you forgot your password, please contact support to reset it.";
     } else {
-        return "Thanks for your question! 🙏 Please check our FAQ section or ask something specific about signup, payments, listings, or cancellations.";
+        return "Thanks for your question! 🙏 Please check our FAQ or ask something specific about signup, services, or providers.";
     }
 }
 
@@ -263,14 +329,3 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
-
-document.addEventListener('click', function(event) {
-    const chatbot = document.getElementById('chatbot');
-    if (!chatbot) return;
-    const isClickInside = chatbot.contains(event.target);
-    
-    if (!isClickInside && isChatOpen) {
-        chatbot.classList.remove('active');
-        isChatOpen = false;
-    }
-});

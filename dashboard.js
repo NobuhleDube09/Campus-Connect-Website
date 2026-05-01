@@ -1,5 +1,5 @@
-// ===== API CONFIGURATION =====
-const API_URL = 'https://campus-connect-api-g1z.onrender.com';
+// ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
+const API_URL = 'http://172.16.16.77:3000';
 
 // ===== SIDEBAR FUNCTIONS =====
 function toggleSidebar() {
@@ -90,7 +90,7 @@ async function loadProviders() {
     } catch (error) {
         console.error('Error loading providers:', error);
         const container = document.getElementById('providers-list');
-        if (container) container.innerHTML = '<div class="error">Error connecting to server. Please try again later.</div>';
+        if (container) container.innerHTML = '<div class="error">Error connecting to server. Make sure the backend is running on localhost:3000</div>';
     }
 }
 
