@@ -8,18 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
 </head>
 <body>
 
     <header>
         <div class="logo">
+            <img src="logo.png" alt="Campus Connect Logo" class="site-logo">
             <h1><i>Campus Connect</i></h1>
         </div>
         <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
         <nav class="nav-links">
             <a href="#" class="active">Home</a>
-            <a href="#" onclick="showAlert('About')">About</a>
+            <a href="#about">About</a>
             <a href="help.html">How It Works</a>
             <a href="contact.html">Contact</a>
         </nav>
@@ -68,25 +70,42 @@
         <button class="btn-teal" onclick="window.location.href='findServices.html'">Find Services</button>
         <button class="btn-orange" onclick="openProviderModal()">Start Your Hustle</button>
     </section>
-
-    <section class="features">
-        <div class="feature">
+    <hr>
+    <section class="about" id="about">
+        <h2 data-aos="fade" data-aos-duration="1000">About Campus Connect</h2>
+        <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+           Campus Connect is a student-empowered marketplace designed to help UJ students turn their everyday skills into real income. 
+        </p>
+        <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+            This platform gives studentpreneurs a chance to showcase their talent and connect with others on campus.
+        </p>
+        <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+            From braiding, nails services, photography and design, Campus Connect bridges the gap by making it easy
+            to discover services, support fellow students and build a network all in one place.
+        </p>
+    </section>
+    <hr>
+    <!--fEatures Section-->
+    <h2 class="features-heading" data-aos="fade" data-aos-duration="1000">How Campus Connect Works</h2>
+    <section class="features"  data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+        <div class="feature service">
             <h3>Find Student Service</h3>
             <p>Find help for any task</p>
         </div>
-        <div class="feature">
+        <div class="feature hustle">
             <h3>Promote Your Hustle</h3>
             <p>Share your skills & services</p>
         </div>
-        <div class="feature">
+        <div class="feature connect">
             <h3>Earn & Connect</h3>
             <p>Network & make money</p>
         </div>
     </section>
 
+    <!-- Popular Services Section -->
     <section class="services">
-        <h2>Popular Services on Campus</h2>
-        <p>Explore what's trending</p>
+        <h2 data-aos="fade" data-aos-duration="1000">Popular Services on Campus</h2>
+        <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">🔥Explore what's trending🔥</p>
         <div class="cards">
             <div class="card tutoring">
                 <h4>Tutoring</h4>
@@ -218,5 +237,7 @@
     </div>
 
     <script src="main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
 </body>
 </html>
