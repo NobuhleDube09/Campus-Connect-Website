@@ -1,5 +1,5 @@
 // ===== API CONFIGURATION =====
-const API_URL = 'https://campus-connect-api-g1jz.onrender.com';
+const API_URL = 'http://172.16.16.77:3000';
 
 // ===== OPEN LOGIN MODAL =====
 function openLoginModal(type) {
@@ -13,7 +13,6 @@ function openLoginModal(type) {
 // ===== CLOSE MODAL =====
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = 'none';
-    // Clear form and message when closing
     if (modalId === 'seekerModal') {
         const form = document.getElementById('seekerLoginForm');
         if (form) form.reset();
@@ -64,10 +63,11 @@ if (seekerForm) {
                 messageEl.style.color = 'green';
                 
                 localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', data.user.fullName);
                 
                 setTimeout(() => {
                     closeModal('seekerModal');
-                    window.location.href = `dashboard.html?email=${encodeURIComponent(email)}`;
+                    window.location.href = 'dashboard.html';
                 }, 1500);
             } else {
                 messageEl.innerText = data.message || '❌ Login failed. Please check your credentials.';
@@ -75,16 +75,16 @@ if (seekerForm) {
             }
         } catch (error) {
             console.error('Login error:', error);
-            messageEl.innerText = '❌ Error connecting to server. Please try again later.';
+            messageEl.innerText = '❌ Cannot connect to server. Make sure backend is running on port 3000';
             messageEl.style.color = 'red';
         }
     });
 }
 
 // ===== SERVICE PROVIDER LOGIN =====
-const providerForm = document.getElementById('providerLoginForm');
-if (providerForm) {
-    providerForm.addEventListener('submit', async function(e) {
+const providerFormElement = document.getElementById('providerLoginForm');
+if (providerFormElement) {
+    providerFormElement.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const email = document.getElementById('providerEmail').value;
@@ -108,10 +108,11 @@ if (providerForm) {
                 messageEl.style.color = 'green';
                 
                 localStorage.setItem('providerEmail', email);
+                localStorage.setItem('providerName', data.provider.fullName);
                 
                 setTimeout(() => {
                     closeModal('providerModal');
-                    window.location.href = `providerDashboard.html?email=${encodeURIComponent(email)}`;
+                    window.location.href = 'providerDashboard.html';
                 }, 1500);
             } else {
                 messageEl.innerText = data.message || '❌ Login failed. Please check your credentials.';
@@ -119,7 +120,7 @@ if (providerForm) {
             }
         } catch (error) {
             console.error('Login error:', error);
-            messageEl.innerText = '❌ Error connecting to server. Please try again later.';
+            messageEl.innerText = '❌ Cannot connect to server. Make sure backend is running on port 3000';
             messageEl.style.color = 'red';
         }
     });

@@ -1,8 +1,34 @@
-const { Pool } = require("pg");
+// db.js
+const sql = require("mssql");
 
-const pool = new Pool({
-  connectionString: "postgres://postgres.hlsxstssrufqzooiivyswc:Buhle_dube09.hlsxstssrufqzooiivyswc.supabase.co:6543/postgres",
-  ssl: { rejectUnauthorized: false }
-});
+const config = {
+    user: "sa",
+    password: "CampusConnect2026!",
+    server: "DESKTOP-3D29LS2",
+    database: "CampusConnectDB",
+    options: {
+        trustServerCertificate: true,
+        encrypt: false,
+        enableArithAbort: true,
+        connectionTimeout: 30000,
+        requestTimeout: 30000
+    }
+};
 
-module.exports = pool;
+let pool = null;
+
+async function getConnection() {
+    try {
+        if (!pool) {
+            console.log("🔄 Connecting to SQL Server...");
+            pool = await new sql.ConnectionPool(config).connect();
+            console.log("✅ Connected to SQL Server Database");
+        }
+        return pool;
+    } catch (err) {
+        console.error("❌ Database connection error:", err.message);
+        throw err;
+    }
+}
+
+module.exports = { getConnection, sql };

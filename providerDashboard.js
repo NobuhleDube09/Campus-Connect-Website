@@ -1,7 +1,7 @@
 // ========== PROVIDER DASHBOARD JS ==========
 
-// ===== API CONFIGURATION =====
-const API_URL = 'https://campus-connect-api-g1z.onrender.com';
+// ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
+const API_URL = 'http://172.16.16.77:3000';
 
 // Get email from URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -58,7 +58,7 @@ async function loadProviderData(email) {
         }
     } catch (error) {
         console.error('Error loading provider data:', error);
-        showToast('Failed to load provider data. Please try again later.');
+        showToast('Failed to load provider data. Make sure the backend is running on localhost:3000');
     }
 }
 

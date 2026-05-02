@@ -1,4 +1,7 @@
-// startHustle.js
+// startHustle.js - Updated to use local SQL Server
+
+// ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
+const API_URL = 'http://172.16.16.77:3000';
 
 // Toggle mobile navigation menu
 function toggleMenu() {
@@ -13,9 +16,10 @@ function showAlert(section) {
     alert(`You clicked on: ${section}`);
 }
 
-// Get the logged-in user's email
+// Get the logged-in user's email (for service provider)
 function getProviderEmail() {
-    return localStorage.getItem('userEmail');
+    // First try to get provider email, then fall back to user email
+    return localStorage.getItem('providerEmail') || localStorage.getItem('userEmail');
 }
 
 // Handle Cover Image upload
@@ -92,8 +96,8 @@ if (addServiceForm) {
         const providerEmail = getProviderEmail();
         
         if (!providerEmail) {
-            alert('Please login first');
-            window.location.href = 'index.html';
+            alert('Please login as a Service Provider first');
+            window.location.href = 'login.html';
             return;
         }
         
@@ -116,7 +120,7 @@ if (addServiceForm) {
         }
         
         try {
-            const response = await fetch('http://localhost:3000/add-service', {
+            const response = await fetch(`${API_URL}/add-service`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(serviceData)
@@ -142,7 +146,7 @@ if (addServiceForm) {
                 if (uploadBox) uploadBox.innerHTML = '<span>Click to upload cover image</span>';
                 
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = 'providerDashboard.html';
                 }, 2000);
             } else {
                 if (messageBox) {
@@ -153,7 +157,7 @@ if (addServiceForm) {
         } catch (error) {
             console.error('Error:', error);
             if (messageBox) {
-                messageBox.innerHTML = '<div class="error">❌ Error connecting to server. Make sure backend is running on port 3000.</div>';
+                messageBox.innerHTML = '<div class="error">❌ Error connecting to server. Make sure backend is running on localhost:3000</div>';
                 messageBox.className = 'message-box error';
             }
         }
