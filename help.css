@@ -3,8 +3,7 @@
     padding: 0;
     box-sizing: border-box;
 }
-
-body {
+.body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
     min-height: 100vh;
@@ -12,7 +11,7 @@ body {
 
 /* Header Styles */
 .help-header {
-    background: linear-gradient(135deg, #2eb997 0%, #084d43 100%);
+    background: linear-gradient(to right, rgba(36, 139, 139, 0.863), #1b82aad8);
     padding: 15px 40px;
     display: flex;
     justify-content: space-between;
@@ -34,13 +33,13 @@ body {
 }
 
 .nav-links a {
-    color: white;
+    color: whitesmoke;
     text-decoration: none;
     margin: 0 15px;
     font-weight: 500;
-    transition: 0.3s;
     padding: 8px 16px;
     border-radius: 25px;
+    transition:0.3s;
 }
 
 .nav-links a:hover, .nav-links a.active {
@@ -48,26 +47,88 @@ body {
 }
 
 /* Hero Section */
-.help-hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.hero {
+    background: rgb(82, 165, 165);
     padding: 60px 20px;
     text-align: center;
     color: white;
 }
 
-.hero-content h1 {
+.hero h1 {
     font-size: 48px;
     margin-bottom: 15px;
     animation: fadeInDown 0.8s ease;
 }
 
-.hero-content p {
+.hero p {
     font-size: 18px;
     margin-bottom: 30px;
     opacity: 0.9;
 }
 
-.search-box {
+/* How It Works Section */
+.how-it-works {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 36px;
+    color: #1e293b;
+    margin-bottom: 50px;
+}
+
+.steps-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.step {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.step:hover {
+    transform: translateY(-10px);
+}
+
+.step-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #2eb997, #084d43);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.step-icon i {
+    font-size: 40px;
+    color: white;
+}
+
+.step h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #1e293b;
+}
+
+.step p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+
+/*.search-box {
     max-width: 500px;
     margin: 0 auto;
     position: relative;
@@ -95,7 +156,7 @@ body {
 .search-box input:focus {
     box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     transform: scale(1.02);
-}
+}*/
 
 /* Help Container */
 .help-container {
@@ -139,7 +200,12 @@ body {
 }
 
 /* FAQ Items */
-.faq {
+.faq-section{
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+.faq-item{
     background: white;
     margin: 15px 0;
     border-radius: 12px;
@@ -155,16 +221,67 @@ body {
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-.question {
+.faq-question {
     padding: 20px;
     font-weight: 600;
+    cursor: pointer;
     color: #1e293b;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    position: relative;
+    background: white;
+    transition: 0.3s;
+}
+.faq-question:hover {
+    background: #f8fafc;
+}
+.faq-question i{
+    color: #2eb997;
+    margin-right: 15px;
+}
+.faq-answer{
+    display: none;
+    padding: 0 20px 20px 60px;
+    color: #64748b;
+    line-height: 1.6;
+    border-top: 1px solid #e2e8f0;
+}
+.faq-item.active .faq-answer {
+    display: block;
 }
 
+.faq-item.active .faq-question .fa-chevron-down {
+    transform: rotate(180deg);
+}
+  
+/* Footer */
+.footer {
+    background: linear-gradient(to right, rgba(36, 139, 139, 0.863), #1b82aad8);
+    color: white;
+    text-align: center;
+    padding: 30px;
+    margin-top: 60px;
+}
+
+@media (max-width: 768px) {
+    .help-header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+}
+            
+.hero h1 {
+    font-size: 32px;
+}
+            
+.steps-container {
+    grid-template-columns: 1fr;
+}
+            
+.faq-answer {
+    padding: 0 15px 15px 40px;
+}
+}
 .question i:first-child {
     color: #2eb997;
     font-size: 20px;
@@ -173,10 +290,6 @@ body {
 .question .arrow {
     margin-left: auto;
     transition: transform 0.3s ease;
-}
-
-.faq.active .arrow {
-    transform: rotate(180deg);
 }
 
 .answer {
