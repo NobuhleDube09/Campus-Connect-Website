@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Services - Campus Connect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="findServices.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <img src="logo.png" alt="Campus Connect Logo" class="site-logo">
+            <h1><i>Campus Connect</i></h1>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="findServices.html" class="active">Find Services</a>
+            <a href="help.html">How It Works</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1><i class="fas fa-search"></i> Find Services Near You</h1>
+            <p>Connect with talented students offering quality services on campus</p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-card">
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by service, name, or keyword...">
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <select id="campusFilter">
+                        <option value="">All Campuses</option>
+                        <option value="APB">APB Campus</option>
+                        <option value="Kingsway">Kingsway Campus</option>
+                        <option value="Doornfontein">Doornfontein Campus</option>
+                        <option value="Soweto">Soweto Campus</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-tag"></i>
+                    <select id="priceFilter">
+                        <option value="">All Prices</option>
+                        <option value="0-1000">R0 - R500 / month</option>
+                        <option value="1000-3000">R500 - R1,500 / month</option>
+                        <option value="3000-5000">R1,500 - R2,000 / month</option>
+                        <option value="5000+">R2,000+ / month</option>
+                    </select>
+                </div>
+                <button class="search-btn" onclick="searchServices()">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+
+            <div class="category-filters" id="categoryFilters">
+                <button class="category-chip active" data-category="all">All Services</button>
+                <button class="category-chip" data-category="Tutoring">📚 Tutoring</button>
+                <button class="category-chip" data-category="Photography">📸 Photography</button>
+                <button class="category-chip" data-category="Graphic Design">🎨 Graphic Design</button>
+                <button class="category-chip" data-category="Hair & Beauty">💇 Hair & Beauty</button>
+                <button class="category-chip" data-category="Web Development">💻 Web Development</button>
+                <button class="category-chip" data-category="IT Support">🔧 IT Support</button>
+                <button class="category-chip" data-category="Music Lessons">🎵 Music Lessons</button>
+                <button class="category-chip" data-category="Fitness Training">💪 Fitness Training</button>
+            </div>
+            
+            <div class="reset-filters">
+                <button class="reset-btn" onclick="resetFilters()">
+                    <i class="fas fa-undo-alt"></i> Reset All Filters
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section">
+        <div class="results-header">
+            <div class="results-count" id="resultsCount">Loading services...</div>
+            <div class="sort-options">
+                <label><i class="fas fa-sort-amount-down"></i></label>
+                <select id="sortSelect" onchange="sortServices()">
+                    <option value="rating">Highest Rated</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name">Name A-Z</option>
+                </select>
+            </div>
+        </div>
+        <div class="services-grid" id="servicesGrid">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading amazing services...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Detail Modal -->
+    <div id="serviceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeServiceModal()">&times;</span>
+            <div id="modalContent">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Campus Connect. Connect, Share, and Earn on Campus!</p>
+    </footer>
+
+    <script src="findServices.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

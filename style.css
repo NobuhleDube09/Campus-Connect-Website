@@ -1,0 +1,778 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: whitesmoke;
+    color: #333;
+}
+
+header {
+    background: linear-gradient(to right, rgba(67, 192, 192, 0.863), #4aaacfd8);
+    color: teal;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+}
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.site-logo {
+    width: 70px;
+    height: auto;
+    filter: grayscale(100%) brightness(2.5) contrast(1.9);
+    margin-right: 10px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: whitesmoke;
+    margin: 0 15px;
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background-color: orange;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-login {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-signup {
+    background-color: orange;
+    color: white;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .nav-links, .auth-buttons {
+        display: none;
+        flex-direction: column;
+        background-color: rgba(0, 128, 128, 0.95);
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        padding: 20px;
+        border-radius: 8px;
+    }
+    .nav-links.show, .auth-buttons.show {
+        display: flex;
+    }
+    .menu-toggle {
+        display: block;
+    }
+    header {
+        position: relative;
+    }
+}
+/*.hero {
+    min-height: 85vh; 
+    padding: 40px 20px;
+    background: /*linear-gradient(to right, rgba(0,81,128,0.7), rgba(59,130,246,0.7)),*/
+              /*url('https://copilot.microsoft.com/th/id/BCO.5b126016-676c-4699-a5c6-359e2c6cac44.png') no-repeat center center;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+}*/
+.hero {
+    min-height: 85vh;
+    padding: 40px 20px;
+    background: url('background.jpeg') no-repeat center center;
+    background-size: cover;
+    background-position: center;
+    color: whitesmoke;
+    text-align: center;
+}
+
+.hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.hero button {
+    margin: 10px;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-teal {
+    background-color: teal;
+    color: white;
+}
+
+.btn-orange {
+    background-color: #f97316;
+    color: white;
+}
+.about{
+    padding: 40px 20px;
+    background-color: white;
+}
+.about h2 {
+    text-align: center;
+    color: rgb(50, 117, 117);
+    font-weight: bold;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display:block;
+    position:relative;
+}
+.about p {
+    text-align:center;
+    max-width: 800px;
+    margin: 10px auto;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/*===============Features=========================*/
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    flex: wrap;
+    /*margin-bottom: 15px;
+    background-color: white;*/
+}
+
+.feature {
+    flex: 1;
+    max-width: 300px;
+    height: 200px;
+    background: white;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    border-radius: 20%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 3px solid teal;
+    margin:10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /*text-align: center;
+    max-width: 800px;
+    background-color: white;
+    border: 3px solid teal;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 10px;*/
+}
+.features-heading {
+    font-weight: bold;
+    text-align: center;
+    font-size: 32px;
+    color: rgb(50, 117, 117);
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display:block;
+    position:relative;
+}
+.feature::before{
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 36px;
+    display: block;
+    margin-bottom: 10px;
+    content:"";
+}
+.feature.service::before {
+    content: "\f002";
+    color: rgb(62, 112, 112);
+}
+
+.feature.hustle::before {
+    content: "\f0a1";
+    color: rgb(61, 112, 112);
+}
+
+.feature.connect::before {
+    content: "\f2b5";
+    color: rgb(61, 112, 112);
+}
+
+.feature h3 {
+    margin-top: 10px;
+    font-size: 22px;
+    color: teal;
+    margin-bottom: 8px;
+}
+.feature p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+/*===============Services=========================*/
+.services {
+    padding: 20px;
+    text-align: center;
+    margin-top: 0px;
+    background-color: #f4f8f885;
+}
+
+.services h2 {
+    font-weight: bold;
+    text-align: center;
+    font-size: 32px;
+    color: rgb(50, 117, 117);
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display:block;
+    position:relative;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.card {
+    width: 210px;
+    height: 150px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-size: cover;
+    background-position: center;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+.card h4 {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.tutoring {
+    background-image: url('https://images.squarespace-cdn.com/content/v1/5cd9c98b0490791c5de0b3ae/1585198015819-1GIW0KQA2TQ4DMI0MZQK/Smart+Schools+Adult+High+School+Diploma+Program+School+Counselors');
+}
+
+/*.photography {
+        background-image: url('https://storage.googleapis.com/photographyfan/img/photography-genres.jpg'); 
+    }*/
+
+.photography {
+    background-image: url('Photography.jpg');
+}
+
+.design {
+    background-image: url('https://www.unite.ai/wp-content/uploads/2023/05/AI-Graphic-design-tools-1000x600.png');
+}
+
+.beauty {
+    background-image: url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9');
+}
+
+/*.footer-banner {
+      background: linear-gradient(to right, rgba(0, 128, 128, 0.863), #0092ccd8);
+      color: white;
+      /*background: url('https://as1.ftcdn.net/v2/jpg/03/57/95/66/1000_F_357956610_wTkwmSsOWHu8e8pl6boagYfbEv0t7OSt.jpg') 
+              no-repeat center center;*/
+      /*text-align: center;
+      padding: 15px 10px;;
+      /*margin-top: 20px;
+}*/
+    
+
+.footer-banner {
+    background: linear-gradient(to right, rgba(36, 139, 139, 0.863), #1b82aad8);
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+}
+
+.footer-banner h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.footer-banner p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.footer-banner button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #134b4d;
+    color: white;
+}
+
+.footer-contact {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer-contact p {
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+.get-started-btn {
+    background: transparent;
+    color: #1a3a5f;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 40px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: 0.2s;
+}
+
+.get-started-btn:hover {
+    background: white;
+    color: #1a3a5f;
+    transform: scale(1.02);
+}
+
+.footer-divider {
+    margin: 5px 0;
+    border: none;
+    height: 1px;
+    background: #3a6a9a;
+}
+
+.help-btn {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 0.7rem 1.8rem;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: 0.2s;
+}
+
+.help-btn:hover {
+    background: white;
+    color: #1a3a5f;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.social-icons a {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 0 8px;
+    background-size: cover;
+    border-radius: 50%;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.social-icons a:hover {
+    transform: scale(1.1);
+}
+
+.facebook {
+    background-image: url('https://th.bing.com/th/id/R.c5911e842cf533aac1369ee3ab9e3ac7?rik=cxjM03MjA0cWAw&riu=http%3a%2f%2fitscheese.com%2fimages%2ffacebook.png&ehk=NZ1pvHO9mQBH13k2cadlpqM1YqhWU8rOMk4X9JU3lsM%3d&risl=&pid=ImgRaw&r=0');
+}
+
+.tiktok {
+    background-image: url('https://locusmag.com/wp-content/uploads/2023/07/tiktok.jpg');
+}
+
+.linkedin {
+    background-image: url('https://disinfocode.eu/images/microsoft-linkedin1742289593.png');
+}
+
+.signup-section {
+    background-color: #ffffff;
+    padding: 30px 20px;
+    max-width: 450px;
+    margin: 50px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.signup-section h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: orange;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.signup-form label {
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.signup-form input,
+.signup-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.btn-signup-form {
+    background-color: teal;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-signup-form:hover {
+    background-color: #e65c00;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 550px;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #999;
+}
+
+.close:hover {
+    color: orange;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+    text-align: center;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.modal-content input,
+.modal-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.modal-content textarea {
+    resize: vertical;
+}
+
+.modal-content button {
+    background-color: orange;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+.modal-content button:hover {
+    background-color: darkorange;
+}
+
+#responseMessage {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* ===== CHATBOT STYLES ===== */
+.chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+}
+
+.chatbot.active {
+    display: flex;
+}
+
+.chat-header {
+    background: linear-gradient(135deg, #2eb997, #084d43);
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.chat-header i {
+    font-size: 20px;
+}
+
+.chat-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.chat-body {
+    height: 350px;
+    overflow-y: auto;
+    padding: 15px;
+    background: #f8fafc;
+}
+
+.message {
+    margin-bottom: 15px;
+    display: flex;
+}
+
+.message.bot {
+    justify-content: flex-start;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message-content {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.message.bot .message-content {
+    background: white;
+    color: #1e293b;
+    border-bottom-left-radius: 5px;
+}
+
+.message.user .message-content {
+    background: linear-gradient(135deg, #2eb997, #084d43);
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+.message.user .message-content i {
+    display: none;
+}
+
+.quick-buttons {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid #e2e8f0;
+    background: white;
+}
+
+.quick-buttons button {
+    background: #f1f5f9;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.quick-buttons button:hover {
+    background: #2eb997;
+    color: white;
+}
+
+.chat-input-area {
+    display: flex;
+    padding: 10px;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+    gap: 10px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 25px;
+    outline: none;
+}
+
+.chat-input-area button {
+    background: linear-gradient(135deg, #2eb997, #084d43);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.chat-input-area button i {
+    color: white;
+}
+
+.chat-input-area button:hover {
+    transform: scale(1.05);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.help-btn {
+    background: #f97316;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px 0;
+}

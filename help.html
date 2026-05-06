@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect - How It Works & Help</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="help.css">
+</head>
+<body>
+
+<header class="help-header">
+    <div class="logo">
+        <h1><i class="fas fa-graduation-cap"></i> Campus Connect</h1>
+    </div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="#" class="active">How It Works</a>
+        <a href="#" onclick="showAlert('Contact')">Contact</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>How Campus Connect Works</h1>
+    <p>Connect, Share Skills, and Earn Money on Campus!</p>
+</section>
+
+<div class="how-it-works">
+    <h2 class="section-title">Getting Started is Easy!</h2>
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h3>1. Sign Up</h3>
+            <p>Create your free account using your student email. Choose to be a Service Seeker or Service Provider.</p>
+        </div>
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-edit"></i>
+            </div>
+            <h3>2. Complete Profile</h3>
+            <p>Add your photo, student ID, and tell others about your skills or what services you need.</p>
+        </div>
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>3. Find or Offer Services</h3>
+            <p>Browse available services or list your own. Connect with students who need your help!</p>
+        </div>
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <h3>4. Connect & Earn</h3>
+            <p>Chat, agree on terms, complete the service, and get paid. Build your reputation with ratings!</p>
+        </div>
+    </div>
+</div>
+
+<div class="faq-section">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-user-circle"></i> Who can use Campus Connect?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            Only registered students with a valid student email can use Campus Connect. This ensures a safe and trustworthy community.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-key"></i> I forgot my password. What do I do?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            Click "Forgot Password" on the login page. Enter your email, and you'll receive a reset link. Create a new password and log in.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-credit-card"></i> How do I make a payment?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            We support Mobile Money, Credit/Debit cards, Bank Transfer, and Cash on pickup. All transactions are secure and encrypted.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-briefcase"></i> How do I list my service?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            Click "Start Your Hustle" on the homepage. Fill in your service details, price, availability, and publish. Your service will be visible to all students!
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-star"></i> How do ratings work?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            After a service is completed, both parties can rate each other from 1-5 stars. Higher ratings help you get more clients!
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+            <span><i class="fas fa-ban"></i> How do I cancel an order?</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+            You can cancel within 24 hours from your "My Orders" page. A full refund will be processed within 3-5 business days.
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2024 Campus Connect. Connect, Share, and Earn on Campus!</p>
+</footer>
+
+<!-- Chat Widget -->
+<div class="chat-widget">
+    <div class="chat-button" onclick="toggleChat()">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <i class="fas fa-robot"></i>
+            <h3>Campus Connect Assistant</h3>
+            <button class="chat-close" onclick="toggleChat()">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <div class="message-content">
+                    <i class="fas fa-robot"></i>
+                    <p>👋 Hello! I'm your Campus Connect assistant. Ask me anything about how the platform works!</p>
+                </div>
+            </div>
+        </div>
+        <div class="quick-replies">
+            <button onclick="quickReply('How do I sign up?')">Sign up?</button>
+            <button onclick="quickReply('How do I list a service?')">List service?</button>
+            <button onclick="quickReply('How do I make a payment?')">Payment?</button>
+            <button onclick="quickReply('How do I cancel an order?')">Cancel order?</button>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Type your question..." onkeypress="handleChatKeyPress(event)">
+            <button onclick="sendChatMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="help.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

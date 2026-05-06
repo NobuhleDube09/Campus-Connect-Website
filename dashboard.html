@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect - Dashboard</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="dashboard-header">
+    <div class="left-header">
+        <span id="menuToggle" class="hamburger" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </span>
+        <h1><i class="fas fa-graduation-cap"></i> Campus Connect</h1>
+    </div>
+
+    <div class="header-actions">
+        <button class="btn-notification">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+        </button>
+        <button class="btn-logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</header>
+
+<!-- Sidebar -->
+<aside id="sidebar" class="sidebar">
+    <div class="profile-header">
+        <img id="profileImage" src="https://ui-avatars.com/api/?background=2563eb&color=fff&size=120&name=User" alt="Profile">
+        <h3 id="full-name">Loading...</h3>
+        <p id="student-id">Student ID: Loading...</p>
+    </div>
+
+    <div class="profile-info">
+        <div class="info-row">
+            <i class="fas fa-envelope"></i>
+            <span id="user-email">Loading...</span>
+        </div>
+        <div class="info-row">
+            <i class="fas fa-tools"></i>
+            <span id="service-needed">Not specified</span>
+        </div>
+
+        <button onclick="editProfile()">
+            <i class="fas fa-edit"></i> Edit Profile
+        </button>
+        <button onclick="viewFavorites()">
+            <i class="fas fa-heart"></i> My Favorites
+        </button>
+        <button onclick="viewBookings()">
+            <i class="fas fa-calendar"></i> My Bookings
+        </button>
+    </div>
+</aside>
+
+<!-- Overlay for sidebar -->
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<main class="dashboard-container">
+    <section class="dashboard-center">
+        <div class="welcome-section">
+            <h2>Discover Services</h2>
+            <p>Find help from fellow students on campus</p>
+        </div>
+
+        <!-- Search Bar - Only ONE instance -->
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search by name, service, campus..." onkeypress="handleKeyPress(event)">
+            <button onclick="searchServices()">Search</button>
+            <button onclick="resetToAllProviders()" class="clear-search-btn" style="background: #e2e8f0; color: #333; margin-left: 5px;">Clear</button>
+        </div>
+
+        <div class="categories-section">
+            <h3><i class="fas fa-fire"></i> Popular Categories</h3>
+            <div class="service-categories">
+                <div class="card tutoring" onclick="filterByCategory('tutoring')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h4>Tutoring</h4>
+                    <p>Academic Help</p>
+                </div>
+                <div class="card photography" onclick="filterByCategory('photography')">
+                    <i class="fas fa-camera"></i>
+                    <h4>Photography</h4>
+                    <p>Photo & Video</p>
+                </div>
+                <div class="card design" onclick="filterByCategory('design')">
+                    <i class="fas fa-paint-brush"></i>
+                    <h4>Graphic Design</h4>
+                    <p>Logos & Flyers</p>
+                </div>
+                <div class="card beauty" onclick="filterByCategory('beauty')">
+                    <i class="fas fa-cut"></i>
+                    <h4>Hair & Beauty</h4>
+                    <p>Styling & Makeup</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="providers-section">
+            <h3><i class="fas fa-star"></i> Top Rated Providers</h3>
+            <div id="providers-list" class="providers-grid">
+                <div class="loading">Loading providers...</div>
+            </div>
+        </div>
+
+        <button class="btn-browse" onclick="browseAllProviders()">
+            <i class="fas fa-search"></i> Browse All Providers
+        </button>
+    </section>
+
+    <aside class="dashboard-right">
+        <div class="recommended">
+            <h3><i class="fas fa-thumbs-up"></i> Recommended for You</h3>
+            <ul id="recommended-list">
+                <li><i class="fas fa-user-graduate"></i> John – Math Tutor
+                <button onclick="viewProfile('john')">View Profile</button></li>
+           
+                <li><i class="fas fa-pen-fancy"></i> Lerato – Writing Coach
+                <button onclick="viewProfile('lerato')">View Profile</button></li>
+
+                <li><i class="fas fa-dumbbell"></i> Sam – Fitness Trainer
+                <button onclick="viewProfile('john')">View Profile</button></li>
+
+            </ul>
+            <a href="#" onclick="viewAllRecommended()">See All <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="updates">
+            <h3><i class="fas fa-bullhorn"></i> Latest Updates</h3>
+            <ul>
+                <li><i class="fas fa-user-plus"></i> New: 4 tutors available near you!</li>
+                <li><i class="fas fa-chart-line"></i> Reminder: Complete your profile!</li>
+                <li><i class="fas fa-calendar-check"></i> Upcoming: Campus Job Fair</li>
+            </ul>
+        </div>
+
+        <div class="stats-card">
+            <h3><i class="fas fa-chart-simple"></i> Your Activity</h3>
+            <div class="stat-item">
+                <span>Services Booked</span>
+                <strong>0</strong>
+            </div>
+            <div class="stat-item">
+                <span>Messages Sent</span>
+                <strong>0</strong>
+            </div>
+            <div class="stat-item">
+                <span>Favorites</span>
+                <strong>0</strong>
+            </div>
+        </div>
+    </aside>
+</main>
+
+<footer class="dashboard-footer">
+    <button onclick="openMessages()"><i class="fas fa-comment-dots"></i> Messages <span class="badge">2</span></button>
+    <button onclick="openSaved()"><i class="fas fa-heart"></i> Saved Listings</button>
+    <button onclick="openSettings()"><i class="fas fa-cog"></i> Settings</button>
+</footer>
+
+<!-- Modal for providers -->
+<div id="providersModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeProvidersModal()">&times;</span>
+        <h2>All Service Providers</h2>
+        <div id="modalProvidersList"></div>
+    </div>    
+</div>
+    
+<div id="profile-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeProfile()">&times;</span>
+    <h2 id="provider-name"></h2>
+    <p><strong>Service:</strong> <span id="provider-service"></span></p>
+    <p><strong>Rating:</strong> <span id="provider-rating"></span></p>
+    <p><strong>Experience:</strong> <span id="provider-experience"></span></p>
+    <p><strong>About:</strong> <span id="provider-about"></span></p>
+  </div>
+</div> 
+
+<script src="dashboard.js"></script>
+</body>
+</html>

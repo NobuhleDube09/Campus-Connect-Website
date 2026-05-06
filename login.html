@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Campus Connect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <h1>Campus Connect</h1>
+        </div>
+        
+        <div class="login-buttons">
+            <button class="btn-seeker" onclick="openLoginModal('seeker')">
+                <i class="fas fa-user-graduate"></i> Login as Service Seeker
+            </button>
+            <button class="btn-provider" onclick="openLoginModal('provider')">
+                <i class="fas fa-briefcase"></i> Login as Service Provider
+            </button>
+        </div>
+        
+        <p class="signup-link">Don't have an account? <a href="index.html">Sign Up</a></p>
+    </div>
+</div>
+
+<!-- Service Seeker Login Modal -->
+<div id="seekerModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('seekerModal')">&times;</span>
+        <div class="modal-header">
+            <i class="fas fa-user-graduate"></i>
+            <h2>Service Seeker Login</h2>
+        </div>
+        <form id="seekerLoginForm">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="seekerEmail" placeholder="Email Address" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="seekerPassword" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn-login-seeker">Login as Seeker</button>
+        </form>
+        <p id="seekerLoginMessage" class="login-message"></p>
+    </div>
+</div>
+
+<!-- Service Provider Login Modal -->
+<div id="providerModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('providerModal')">&times;</span>
+        <div class="modal-header">
+            <i class="fas fa-briefcase"></i>
+            <h2>Service Provider Login</h2>
+        </div>
+        <form id="providerLoginForm">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="providerEmail" placeholder="Email Address" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="providerPassword" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn-login-provider">Login as Provider</button>
+        </form>
+        <p id="providerLoginMessage" class="login-message"></p>
+    </div>
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>

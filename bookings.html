@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Service Provider Hub | Client Bookings Dashboard</title>
+    <link rel="stylesheet" href="bookings.css">
+</head>
+<body>
+<div class="provider-container">
+    <!-- Header with service provider info -->
+    <div class="provider-header">
+        <div class="provider-title">
+            <a href="#" class="back-link" onclick="history.back(); return false;">← Back</a>
+        </div>
+        
+    </div>
+
+    <!-- Stats overview -->
+    <div class="stats-row" id="statsOverview">
+        <div class="stat-card-provider">
+            <div class="stat-label">Total Bookings</div>
+            <div class="stat-number" id="totalBookingsCount">0</div>
+        </div>
+        <div class="stat-card-provider">
+            <div class="stat-label">Upcoming / Confirmed</div>
+            <div class="stat-number" id="confirmedCount">0</div>
+        </div>
+        <div class="stat-card-provider">
+            <div class="stat-label">Completed Services</div>
+            <div class="stat-number" id="completedCount">0</div>
+        </div>
+        <div class="stat-card-provider">
+            <div class="stat-label">Active Clients</div>
+            <div class="stat-number" id="uniqueClientsCount">0</div>
+        </div>
+    </div>
+
+    <div class="main-dashboard">
+        <div class="section-title">
+            📅 Client Bookings 
+            <span style="font-size:13px; font-weight:normal; background:#eef2fa; padding:4px 12px; border-radius:30px;"></span>
+        </div>
+
+        <!-- Filter tabs (by status) -->
+        <div class="filter-bar">
+            <button class="filter-btn active-filter" data-filter="all">📌 All Bookings</button>
+            <button class="filter-btn" data-filter="confirmed">✅ Confirmed</button>
+            <button class="filter-btn" data-filter="pending">⏳ Pending</button>
+            <button class="filter-btn" data-filter="completed">🏁 Completed</button>
+            <button class="filter-btn" data-filter="cancelled">❌ Cancelled</button>
+        </div>
+
+        <!-- Bookings Table -->
+        <div class="bookings-table-wrapper" id="bookingsTableContainer">
+            <!-- dynamic content -->
+            <div style="text-align:center; padding: 40px;">Loading client bookings...</div>
+        </div>
+
+        <!-- Demo: Simulate a new client booking (for provider to see live updates) -->
+        <div style="margin-top: 32px; background: #fefaf0; border-radius: 24px; padding: 20px; border: 1px solid #f3e5cd;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <strong>🧑‍💻 Simulate a new client booking</strong><br>
+                    <span style="font-size:13px; color:#6f6f4a;">(As a service provider, see how new client bookings appear instantly)</span>
+                </div>
+                <button id="simulateBookingBtn" style="background:#2c7a5e; color:white; border:none; padding:10px 24px; border-radius:40px; font-weight:500; cursor:pointer;">+ Add Demo Client Booking</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<script src="bookings.js"></script>
+</body>
+</html>
