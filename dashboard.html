@@ -12,6 +12,28 @@
 </head>
 <body>
 
+    <!--COOKIE CONSENT BANNER-->
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-banner-icon">🍪</div>
+  <div class="cookie-banner-text">
+    <h4>We use cookies to personalise your experience</h4>
+    <p>
+      Campus Connect uses cookies to remember what services you browse and tailor
+      recommendations just for you. No personal data is sold or shared.
+      <a href="#">Learn more</a>
+    </p>
+  </div>
+  <div class="cookie-actions">
+    <button class="btn-accept" onclick="CookieManager.acceptCookies(); renderRecommended()">
+      <i class="fas fa-check"></i> Accept All
+    </button>
+    <button class="btn-decline" onclick="CookieManager.declineCookies()">
+      Decline
+    </button>
+  </div>
+</div>
+
+    
 <header class="dashboard-header">
     <div class="left-header">
         <span id="menuToggle" class="hamburger" onclick="toggleSidebar()">
@@ -70,7 +92,23 @@
             <h2>Discover Services</h2>
             <p>Find help from fellow students on campus</p>
         </div>
-
+       <!-- LIVE SEARCH -->
+    <div class="search-wrapper" id="searchWrapper">
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by name, service, campus…"
+          autocomplete="off"
+          oninput="onLiveSearch(this.value)"
+          onkeydown="handleKey(event)"
+        >
+        <button class="btn-search" onclick="commitSearch()">Search</button>
+        <button class="btn-clear" onclick="clearSearch()">Clear</button>
+      </div>
+      <div id="searchDropdown" class="search-dropdown"></div>
+    </div>
         <!-- Search Bar - Only ONE instance -->
         <div class="search-bar">
             <i class="fas fa-search"></i>
@@ -157,6 +195,8 @@
                 <span>Favorites</span>
                 <strong>0</strong>
             </div>
+             <div class="stat-item"><span>Profiles Viewed</span><strong id="stat-viewed">0</strong></div>
+    </div>
         </div>
     </aside>
 </main>
