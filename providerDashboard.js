@@ -1,7 +1,7 @@
 // ========== PROVIDER DASHBOARD JS ==========
 
 // ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
-const API_URL = 'http://172.16.16.77:3000';
+const API_URL = 'http://10.250.108.184:3000';
 
 // Get email from URL
 const urlParams = new URLSearchParams(window.location.search);

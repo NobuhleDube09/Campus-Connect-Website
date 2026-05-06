@@ -1,7 +1,7 @@
 // findServices.js - Clean resolved version
 
 // ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
-const API_URL = 'http://172.16.16.77:3000';
+const API_URL = 'http://10.250.108.184:3000';
 
 //  Global Variables
 let allServices = [];

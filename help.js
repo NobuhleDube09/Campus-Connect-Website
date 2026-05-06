@@ -1,119 +1,65 @@
+// ===== API CONFIGURATION =====
+const API_URL = 'http://10.250.108.184:3000';
+
 // ===== FAQ Accordion Functionality =====
-const faqs = document.querySelectorAll(".faq");
-
-faqs.forEach(faq => {
-    faq.addEventListener("click", () => {
-        // Toggle active class on clicked FAQ
-        faq.classList.toggle("active");
-        
-        const answer = faq.querySelector(".answer");
-        
-        if (answer.style.display === "block") {
-            answer.style.display = "none";
-        } else {
-            // Close other FAQs
-            faqs.forEach(otherFaq => {
-                if (otherFaq !== faq) {
-                    otherFaq.classList.remove("active");
-                    const otherAnswer = otherFaq.querySelector(".answer");
-                    otherAnswer.style.display = "none";
-                }
-            });
-            answer.style.display = "block";
-        }
-    });
-});
-
-// ===== Search FAQ Function =====
-function searchFAQ() {
-    const searchInput = document.getElementById('searchInput').value.toLowerCase();
-    const faqItems = document.querySelectorAll('.faq');
-    
-    faqItems.forEach(faq => {
-        const question = faq.querySelector('.question').innerText.toLowerCase();
-        const answer = faq.querySelector('.answer').innerText.toLowerCase();
-        
-        if (question.includes(searchInput) || answer.includes(searchInput)) {
-            faq.style.display = 'block';
-        } else {
-            faq.style.display = 'none';
-        }
-    });
+function toggleFAQ(element) {
+    const faqItem = element.closest('.faq-item');
+    faqItem.classList.toggle('active');
 }
 
-// ===== Filter by Category =====
-function filterCategory(category) {
-    const faqItems = document.querySelectorAll('.faq');
-    const buttons = document.querySelectorAll('.category-btn');
-    
-    // Update active button
-    buttons.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.innerText.toLowerCase() === category || (category === 'all' && btn.innerText === 'All')) {
-            btn.classList.add('active');
-        }
-    });
-    
-    faqItems.forEach(faq => {
-        if (category === 'all') {
-            faq.style.display = 'block';
-        } else if (faq.getAttribute('data-category') === category) {
-            faq.style.display = 'block';
-        } else {
-            faq.style.display = 'none';
-        }
-    });
+// ===== Global Show Alert Function =====
+function showAlert(pageName) {
+    alert(`✨ Campus Connect • ${pageName} page\n\nThis is a demo navigation. The full experience will be available soon! 🎓`);
 }
 
-// ===== Chatbot Functions =====
-function toggleChatbot() {
-    const modal = document.getElementById('chatbotModal');
-    if (modal.style.display === 'flex') {
-        modal.style.display = 'none';
-    } else {
-        modal.style.display = 'flex';
-    }
+// ===== CHAT FUNCTIONS =====
+function toggleChat() {
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.classList.toggle('active');
 }
 
-function sendMessage() {
+function sendChatMessage() {
     const input = document.getElementById('chatInput');
     const message = input.value.trim();
     
     if (message === '') return;
     
     // Add user message
-    addMessage(message, 'user');
+    addChatMessage(message, 'user');
     input.value = '';
     
-    // Simulate bot response
+    // Get bot response
     setTimeout(() => {
         const response = getBotResponse(message);
-        addMessage(response, 'bot');
+        addChatMessage(response, 'bot');
     }, 500);
 }
 
-function addMessage(message, sender) {
+function quickReply(message) {
+    addChatMessage(message, 'user');
+    setTimeout(() => {
+        const response = getBotResponse(message);
+        addChatMessage(response, 'bot');
+    }, 500);
+}
+
+function addChatMessage(message, sender) {
     const messagesContainer = document.getElementById('chatMessages');
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${sender}`;
-    
-    const now = new Date();
-    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     
     if (sender === 'bot') {
         messageDiv.innerHTML = `
             <div class="message-content">
                 <i class="fas fa-robot"></i>
-                <p>${message}</p>
+                <p>${escapeHtml(message)}</p>
             </div>
-            <span class="message-time">${timeString}</span>
         `;
     } else {
         messageDiv.innerHTML = `
             <div class="message-content">
-                <p>${message}</p>
+                <p>${escapeHtml(message)}</p>
             </div>
-            <span class="message-time">${timeString}</span>
         `;
     }
     
@@ -124,72 +70,54 @@ function addMessage(message, sender) {
 function getBotResponse(message) {
     const msg = message.toLowerCase();
     
-    if (msg.includes('sign up') || msg.includes('register')) {
-        return "To sign up, click the 'Sign Up' button on the homepage. You'll need your student email and student ID number.";
-    } else if (msg.includes('list') || msg.includes('service') || msg.includes('hustle')) {
-        return "To list a service, click 'Start Your Hustle' on the homepage. Fill in your service details, price, and availability, then publish!";
-    } else if (msg.includes('payment') || msg.includes('pay')) {
-        return "We accept Mobile Money, Credit/Debit cards, Bank Transfer, and Cash on pickup. All payments are secure and encrypted.";
-    } else if (msg.includes('cancel') || msg.includes('order')) {
-        return "You can cancel an order within 24 hours from your 'My Orders' page. A full refund will be processed within 3-5 business days.";
-    } else if (msg.includes('password') || msg.includes('forgot')) {
-        return "If you forgot your password, click 'Forgot Password' on the login page. You'll receive a reset link in your email.";
-    } else if (msg.includes('profile') || msg.includes('update')) {
-        return "Go to your Dashboard, click on your profile picture, and select 'Edit Profile' to update your information.";
-    } else if (msg.includes('rating') || msg.includes('review')) {
-        return "After a service is completed, you can rate the provider from 1-5 stars. Ratings help build trust in our community!";
-    } else if (msg.includes('report') || msg.includes('user')) {
-        return "To report a user, go to their profile and click 'Report User'. Our team will review within 24 hours.";
-    } else {
-        return "Thanks for your question! Please check our FAQ section or contact support for more specific help. 📚";
+    const responses = {
+        'sign up': "📝 To sign up, click the 'Sign Up' button on the homepage. You'll need your student email and student ID number. It's free!",
+        'register': "📝 To sign up, click the 'Sign Up' button on the homepage. You'll need your student email and student ID number. It's free!",
+        'list': "💼 To list a service, click 'Start Your Hustle' on the homepage. Fill in your service details, price, and availability, then publish!",
+        'service': "💼 To list a service, click 'Start Your Hustle' on the homepage. Fill in your service details, price, and availability, then publish!",
+        'hustle': "💼 To list a service, click 'Start Your Hustle' on the homepage. Fill in your service details, price, and availability, then publish!",
+        'payment': "💰 We accept Mobile Money, Credit/Debit cards, Bank Transfer, and Cash on pickup. All payments are secure and encrypted.",
+        'pay': "💰 We accept Mobile Money, Credit/Debit cards, Bank Transfer, and Cash on pickup. All payments are secure and encrypted.",
+        'cancel': "❌ You can cancel an order within 24 hours from your 'My Orders' page. A full refund will be processed within 3-5 business days.",
+        'order': "❌ You can cancel an order within 24 hours from your 'My Orders' page. A full refund will be processed within 3-5 business days.",
+        'password': "🔑 If you forgot your password, click 'Forgot Password' on the login page. You'll receive a reset link in your email.",
+        'forgot': "🔑 If you forgot your password, click 'Forgot Password' on the login page. You'll receive a reset link in your email.",
+        'profile': "👤 Go to your Dashboard, click on your profile picture, and select 'Edit Profile' to update your information.",
+        'update': "👤 Go to your Dashboard, click on your profile picture, and select 'Edit Profile' to update your information.",
+        'rating': "⭐ After a service is completed, you can rate the provider from 1-5 stars. Ratings help build trust in our community!",
+        'review': "⭐ After a service is completed, you can rate the provider from 1-5 stars. Ratings help build trust in our community!",
+        'how it works': "📚 Campus Connect connects students! Sign up → Complete profile → Find or offer services → Connect and earn!",
+        'hello': "👋 Hello! Welcome to Campus Connect! How can I help you today?",
+        'hi': "👋 Hi there! Welcome to Campus Connect! Ask me anything about the platform."
+    };
+    
+    for (const [key, response] of Object.entries(responses)) {
+        if (msg.includes(key)) {
+            return response;
+        }
     }
+    
+    return "Thanks for your question! 🙏 Please check our FAQ section below or ask about: signup, services, payments, cancellations, or ratings. You can also click 'Contact' to reach our support team!";
 }
 
 function handleChatKeyPress(event) {
     if (event.key === 'Enter') {
-        sendMessage();
+        sendChatMessage();
     }
 }
 
-function quickReply(message) {
-    document.getElementById('chatInput').value = message;
-    sendMessage();
+function escapeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
-// ===== Contact Form Functions =====
-function openContactForm() {
-    const modal = document.getElementById('contactModal');
-    modal.style.display = 'flex';
-}
-
-function closeContactForm() {
-    const modal = document.getElementById('contactModal');
-    modal.style.display = 'none';
-}
-
-// Handle contact form submission
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const name = document.getElementById('contactName').value;
-        const email = document.getElementById('contactEmail').value;
-        const subject = document.getElementById('contactSubject').value;
-        const message = document.getElementById('contactMessage').value;
-        
-        alert(`Thank you ${name}! Your message has been sent. We'll respond within 24 hours.`);
-        closeContactForm();
-        contactForm.reset();
-    });
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    const contactModal = document.getElementById('contactModal');
-    const chatbotModal = document.getElementById('chatbotModal');
-    
-    if (event.target === contactModal) {
-        closeContactForm();
-    }
-}
+// ===== Initialize Page =====
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Help page loaded - Chat widget ready!');
+    console.log('API URL:', API_URL);
+});

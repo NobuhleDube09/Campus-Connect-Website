@@ -1,5 +1,5 @@
 // ===== API CONFIGURATION =====
-const API_URL = 'http://172.16.16.77:3000';
+const API_URL = 'http://10.250.108.184:3000';
 
 // ===== OPEN LOGIN MODAL =====
 function openLoginModal(type) {

@@ -1,6 +1,6 @@
 // ===== API CONFIGURATION =====
 // Use your local backend
-const API_URL = 'http://172.16.16.77:3000';
+const API_URL = 'http://10.250.108.184:3000';
 
 function openModal() {
     document.getElementById("signupModal").style.display = "block";
@@ -225,8 +225,9 @@ function toggleMenu() {
     }
 }
 
-function showAlert(message) {
-    alert(message + " feature coming soon!");
+// ===== GLOBAL SHOW ALERT FUNCTION FOR NAVIGATION =====
+function showAlert(pageName) {
+    alert(`✨ Campus Connect • ${pageName} page\n\nThis is a demo navigation. The full experience will be available soon! 🎓`);
 }
 
 // Close modals when clicking outside

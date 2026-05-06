@@ -7,7 +7,7 @@ const { getConnection, sql } = require("./db");
 const app = express();
 const PORT = 3000;
 
-// ===== CORS MIDDLEWARE (Moved before bodyParser for best practice) =====
+// ===== CORS MIDDLEWARE =====
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 
 // ===== MIDDLEWARE =====
 app.use(bodyParser.json());
-app.use(express.static(__dirname)); // serve static files (HTML, CSS, JS)
+app.use(express.static(__dirname));
 
 let dbPool = null;
 
@@ -30,7 +30,7 @@ getConnection()
   })
   .catch(err => {
     console.error("❌ Failed to connect to database:", err.message);
-    process.exit(1); // Exit if database connection fails
+    process.exit(1);
   });
 
 function getPool() {
@@ -43,7 +43,7 @@ app.get("/test", (req, res) => {
   res.json({ message: "Server is running!", dbConnected: dbPool !== null });
 });
 
-// ===== CHECK TABLES ENDPOINT (Added for debugging) =====
+// ===== CHECK TABLES ENDPOINT =====
 app.get("/check-tables", async (req, res) => {
   try {
     const pool = getPool();
@@ -112,7 +112,7 @@ app.post("/login", async (req, res) => {
   }
 
   try {
-    const pool = getPool(); // Fixed: using getPool() instead of dbPool directly
+    const pool = getPool();
     const result = await pool.request()
       .input("email", sql.NVarChar, email)
       .query("SELECT * FROM ServiceSeekers WHERE Email = @email");
@@ -148,14 +148,13 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
-// ===== PROVIDER SIGNUP (Updated with monthly rate option) =====
+
+// ===== PROVIDER SIGNUP =====
 app.post("/provider/signup", async (req, res) => {
   const { fullName, surname, email, studentNumber, password, serviceType, bio, hourlyRate, monthlyRate, campus, availability } = req.body;
   
-  // Allow either hourly rate OR monthly rate
   let finalHourlyRate = hourlyRate;
   if (monthlyRate && !hourlyRate) {
-    // Convert monthly to hourly (assuming 160 hours per month)
     finalHourlyRate = monthlyRate / 160;
   }
   
@@ -207,7 +206,7 @@ app.post("/provider/login", async (req, res) => {
   }
 
   try {
-    const pool = getPool(); // Fixed: using getPool() instead of dbPool directly
+    const pool = getPool();
     const result = await pool.request()
       .input("email", sql.NVarChar, email)
       .query("SELECT * FROM ServiceProviders WHERE Email = @email");
@@ -244,7 +243,6 @@ app.post("/provider/login", async (req, res) => {
 });
 
 // ===== GET ALL PROVIDERS =====
-// ===== GET ALL PROVIDERS (Updated with monthly rate) =====
 app.get("/providers", async (req, res) => {
   try {
     const pool = getPool();
@@ -260,7 +258,6 @@ app.get("/providers", async (req, res) => {
         Campus, 
         Availability, 
         HourlyRate,
-        -- Calculate monthly rate (assuming 20 working days * 8 hours)
         (HourlyRate * 8 * 20) as MonthlyRate
         FROM ServiceProviders`);
     
@@ -271,15 +268,74 @@ app.get("/providers", async (req, res) => {
   }
 });
 
-// ===== START SERVER =====
+// ===== CONTACT FORM ENDPOINT =====
+app.post("/contact", async (req, res) => {
+  const { name, email, subject, message } = req.body;
+  
+  if (!name || !email || !message) {
+    return res.status(400).json({ success: false, message: "Name, email, and message are required" });
+  }
+  
+  try {
+    const pool = getPool();
+    await pool.request()
+      .input("name", sql.NVarChar, name)
+      .input("email", sql.NVarChar, email)
+      .input("subject", sql.NVarChar, subject || null)
+      .input("message", sql.NVarChar, message)
+      .query(`INSERT INTO ContactMessages (Name, Email, Subject, Message, CreatedAt) 
+              VALUES (@name, @email, @subject, @message, GETDATE())`);
+    
+    res.json({ success: true, message: "Message sent successfully!" });
+  } catch (err) {
+    console.error("Contact form error:", err);
+    res.json({ success: true, message: "Message received!" });
+  }
+});
+
+// ===== CHATBOT ENDPOINT =====
+app.post("/chatbot", async (req, res) => {
+  const { message } = req.body;
+  
+  if (!message) {
+    return res.status(400).json({ success: false, response: "Please ask a question!" });
+  }
+  
+  const msg = message.toLowerCase();
+  let response = "";
+  
+  if (msg.includes('sign up') || msg.includes('register')) {
+    response = "📝 To sign up, click the 'Sign Up' button on the homepage. You'll need your student email and student ID number. It's free!";
+  } else if (msg.includes('list') || msg.includes('service') || msg.includes('hustle')) {
+    response = "💼 To list a service, click 'Start Your Hustle' on the homepage. Fill in your service details, price, and availability, then publish!";
+  } else if (msg.includes('payment') || msg.includes('pay')) {
+    response = "💰 We accept Mobile Money, Credit/Debit cards, Bank Transfer, and Cash on pickup. All payments are secure and encrypted.";
+  } else if (msg.includes('cancel') || msg.includes('order')) {
+    response = "❌ You can cancel an order within 24 hours from your 'My Orders' page. A full refund will be processed within 3-5 business days.";
+  } else if (msg.includes('password') || msg.includes('forgot')) {
+    response = "🔑 If you forgot your password, click 'Forgot Password' on the login page. You'll receive a reset link in your email.";
+  } else if (msg.includes('hello') || msg.includes('hi')) {
+    response = "👋 Hello! Welcome to Campus Connect! How can I help you today?";
+  } else {
+    response = "Thanks for your question! 🙏 Please check our FAQ section or ask about: signup, services, payments, cancellations, or ratings.";
+  }
+  
+  res.json({ success: true, response: response });
+});
+
+// ===== START HTTP SERVER =====
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-  console.log(`📝 Test: GET http://localhost:${PORT}/test`);
-  console.log(`📝 Check Tables: GET http://localhost:${PORT}/check-tables`);
-  console.log(`📝 Signup: POST http://localhost:${PORT}/signup`);
-  console.log(`📝 Login: POST http://localhost:${PORT}/login`);
-  console.log(`📝 Provider Signup: POST http://localhost:${PORT}/provider/signup`);
-  console.log(`📝 Provider Login: POST http://localhost:${PORT}/provider/login`);
-  console.log(`📝 Providers: GET http://localhost:${PORT}/providers`);
-  console.log(`🌐 Homepage: http://localhost:${PORT}/`);
+  console.log(`\n✅ ===== SERVER RUNNING =====`);
+  console.log(`🌐 HTTP Server: http://172.16.16.77:${PORT}`);
+  console.log(`🏠 Homepage: http://172.16.16.77:${PORT}/`);
+  console.log(`\n📝 ENDPOINTS:`);
+  console.log(`   GET  http://172.16.16.77:${PORT}/test`);
+  console.log(`   GET  http://172.16.16.77:${PORT}/check-tables`);
+  console.log(`   POST http://172.16.16.77:${PORT}/signup`);
+  console.log(`   POST http://172.16.16.77:${PORT}/login`);
+  console.log(`   POST http://172.16.16.77:${PORT}/provider/signup`);
+  console.log(`   POST http://172.16.16.77:${PORT}/provider/login`);
+  console.log(`   GET  http://172.16.16.77:${PORT}/providers`);
+  console.log(`   POST http://172.16.16.77:${PORT}/contact`);
+  console.log(`   POST http://172.16.16.77:${PORT}/chatbot\n`);
 });
