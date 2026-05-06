@@ -1,6 +1,89 @@
 // ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
 const API_URL = 'http://10.250.108.184:3000';
 
+//  COOKIE MANAGER
+
+const CookieManager = {
+  hasConsented() { return localStorage.getItem('cc_consent') === 'accepted'; },
+  acceptCookies() {
+    localStorage.setItem('cc_consent', 'accepted');
+    document.getElementById('cookie-banner').classList.add('hidden');
+  },
+  declineCookies() {
+    localStorage.setItem('cc_consent', 'declined');
+    document.getElementById('cookie-banner').classList.add('hidden');
+  },
+  trackView(category) {
+    if (!this.hasConsented() || !category) return;
+    const h = this.getHistory();
+    h[category] = (h[category] || 0) + 1;
+    localStorage.setItem('cc_history', JSON.stringify(h));
+  },
+  trackProvider(id) {
+    if (!this.hasConsented()) return;
+    const viewed = this.getViewed();
+    if (!viewed.includes(id)) { viewed.unshift(id); }
+    localStorage.setItem('cc_viewed', JSON.stringify(viewed.slice(0, 30)));
+    const p = PROVIDERS.find(x => x.id === id);
+    if (p) this.trackView(p.category);
+    updateActivityStats();
+  },
+  getHistory() { try { return JSON.parse(localStorage.getItem('cc_history') || '{}'); } catch { return {}; } },
+  getViewed()  { try { return JSON.parse(localStorage.getItem('cc_viewed')  || '[]'); } catch { return []; } },
+  getTopCats(n = 3) {
+    return Object.entries(this.getHistory())
+      .sort((a,b) => b[1] - a[1]).slice(0, n).map(([c]) => c);
+  },
+  getRecommended(limit = 4) {
+    const topCats = this.getTopCats(3);
+    const viewed  = this.getViewed();
+    let recs = [];
+    topCats.forEach(cat => {
+      PROVIDERS.forEach(p => {
+        if ((p.category === cat) && !viewed.includes(p.id) && !recs.find(r => r.id === p.id))
+          recs.push(p);
+      });
+    });
+    if (recs.length < limit) {
+      PROVIDERS
+        .filter(p => !viewed.includes(p.id) && !recs.find(r => r.id === p.id))
+        .sort((a,b) => b.rating - a.rating)
+        .forEach(p => recs.push(p));
+    }
+    return recs.slice(0, limit);
+  }
+};
+
+
+//  STATE
+
+let currentFilter  = null;
+let currentQuery   = '';
+let favourites     = [];
+let dropdownItems  = [];
+let dropdownIndex  = -1;
+
+//  INIT
+document.addEventListener('DOMContentLoaded', () => {
+  // Cookie banner
+  if (CookieManager.hasConsented() || localStorage.getItem('cc_consent') === 'declined') {
+    document.getElementById('cookie-banner').classList.add('hidden');
+  }
+  // Load favourites
+  try { favourites = JSON.parse(localStorage.getItem('cc_favs') || '[]'); } catch {}
+  // Display
+  displayProviders(PROVIDERS);
+  renderRecommended();
+  updateActivityStats();
+
+  // Close dropdown on outside click
+  document.addEventListener('click', e => {
+    if (!document.getElementById('searchWrapper').contains(e.target))
+      closeDropdown();
+  });
+});
+
+
 // ===== SIDEBAR FUNCTIONS =====
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
@@ -320,3 +403,89 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 });
+
+//  LIVE SEARCH
+
+function onLiveSearch(val) {
+  currentQuery = val.trim().toLowerCase();
+  const dd = document.getElementById('searchDropdown');
+
+  if (!currentQuery) { closeDropdown(); renderProviders(); return; }
+
+  dropdownItems = PROVIDERS.filter(p =>
+    `${p.fullname} ${p.surname} ${p.servicetype} ${p.campus} ${p.tags.join(' ')}`.toLowerCase().includes(currentQuery)
+  ).slice(0, 6);
+
+  dropdownIndex = -1;
+
+  if (dropdownItems.length === 0) {
+    dd.innerHTML = `<div class="dropdown-no-results"><i class="fas fa-search" style="display:block;margin-bottom:6px;opacity:.4"></i>No results for "<strong>${esc(val)}</strong>"</div>`;
+  } else {
+    dd.innerHTML = dropdownItems.map((p, i) => `
+      <div class="dropdown-item" id="dd-${i}" onclick="pickDropdown(${i})">
+        <div class="dropdown-avatar">${p.avatar}</div>
+        <div class="dropdown-info">
+          <h5>${esc(p.fullname)} ${esc(p.surname)}</h5>
+          <span>${esc(p.servicetype)} · ${esc(p.campus)}</span>
+        </div>
+        <span class="dropdown-badge">⭐ ${p.rating}</span>
+      </div>
+    `).join('');
+  }
+
+  dd.classList.add('open');
+  // Also filter main grid live
+  renderProviders();
+}
+
+function pickDropdown(i) {
+  const p = dropdownItems[i];
+  if (!p) return;
+  closeDropdown();
+  openProviderModal(p.id);
+}
+
+function closeDropdown() {
+  document.getElementById('searchDropdown').classList.remove('open');
+  dropdownIndex = -1;
+}
+
+function handleKey(e) {
+  const dd = document.getElementById('searchDropdown');
+  if (!dd.classList.contains('open')) return;
+  if (e.key === 'ArrowDown') {
+    dropdownIndex = Math.min(dropdownIndex + 1, dropdownItems.length - 1);
+    highlightDropdown();
+  } else if (e.key === 'ArrowUp') {
+    dropdownIndex = Math.max(dropdownIndex - 1, -1);
+    highlightDropdown();
+  } else if (e.key === 'Enter') {
+    if (dropdownIndex >= 0) pickDropdown(dropdownIndex);
+    else { commitSearch(); closeDropdown(); }
+  } else if (e.key === 'Escape') {
+    closeDropdown();
+  }
+}
+
+function highlightDropdown() {
+  document.querySelectorAll('.dropdown-item').forEach((el, i) => {
+    el.style.background = i === dropdownIndex ? 'var(--card2)' : '';
+  });
+}
+
+
+
+function commitSearch() {
+  closeDropdown();
+  renderProviders();
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  currentQuery = '';
+  currentFilter = null;
+  document.getElementById('activeFilter').style.display = 'none';
+  closeDropdown();
+  displayProviders(PROVIDERS);
+  document.querySelector('.providers-section h3').innerHTML = '<i class="fas fa-star"></i> Top Rated Providers';
+}
