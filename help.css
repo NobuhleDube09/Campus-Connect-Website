@@ -12,7 +12,7 @@ body {
 
 /* Header */
 .help-header {
-    background: linear-gradient(135deg, #2eb997 0%, #084d43 100%);
+    background: linear-gradient(to right, rgba(36, 139, 139, 0.863), #1b82aad8);
     padding: 15px 40px;
     display: flex;
     justify-content: space-between;
@@ -30,7 +30,7 @@ body {
 }
 
 .nav-links a {
-    color: white;
+    color: whitesmoke;
     text-decoration: none;
     margin: 0 15px;
     font-weight: 500;
@@ -45,7 +45,7 @@ body {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: rgb(82, 165, 165);
     padding: 60px 20px;
     text-align: center;
     color: white;
@@ -141,6 +141,7 @@ body {
     padding: 20px;
     font-weight: 600;
     cursor: pointer;
+    color: #1e293b;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -175,7 +176,7 @@ body {
 
 /* Footer */
 .footer {
-    background: #1e293b;
+    background: linear-gradient(to right, rgba(36, 139, 139, 0.863), #1b82aad8);
     color: white;
     text-align: center;
     padding: 30px;
@@ -375,6 +376,7 @@ body {
     transform: scale(1.05);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
     .help-header {
         flex-direction: column;

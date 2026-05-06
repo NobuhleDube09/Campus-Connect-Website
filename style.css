@@ -1,12 +1,12 @@
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background-color: #f4f6f8;
+    background-color: whitesmoke;
     color: #333;
 }
 
 header {
-    background: linear-gradient(to right, #00cc7e44, #00d9ff);
+    background: linear-gradient(to right, rgba(67, 192, 192, 0.863), #4aaacfd8);
     color: teal;
     padding: 15px 40px;
     display: flex;
@@ -20,6 +20,17 @@ header h1 {
     font-style: italic;
     font-weight: 700;
 }
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.site-logo {
+    width: 70px;
+    height: auto;
+    filter: grayscale(100%) brightness(2.5) contrast(1.9);
+    margin-right: 10px;
+}
 
 .nav-links {
     display: flex;
@@ -27,7 +38,7 @@ header h1 {
 }
 
 .nav-links a {
-    color: white;
+    color: whitesmoke;
     margin: 0 15px;
     text-decoration: none;
     font-weight: 600;
@@ -118,7 +129,7 @@ header h1 {
     background: url('background.jpeg') no-repeat center center;
     background-size: cover;
     background-position: center;
-    color: white;
+    color: whitesmoke;
     text-align: center;
 }
 
@@ -154,31 +165,111 @@ header h1 {
     background-color: #f97316;
     color: white;
 }
+.about{
+    padding: 40px 20px;
+    background-color: white;
+}
+.about h2 {
+    text-align: center;
+    color: rgb(50, 117, 117);
+    font-weight: bold;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display:block;
+    position:relative;
+}
+.about p {
+    text-align:center;
+    max-width: 800px;
+    margin: 10px auto;
+    font-size: 18px;
+    line-height: 1.6;
+}
 
+/*===============Features=========================*/
 .features {
     display: flex;
     justify-content: space-around;
     padding: 20px;
-    margin-bottom: 15px;
-    background-color: white;
+    flex: wrap;
+    /*margin-bottom: 15px;
+    background-color: white;*/
 }
 
 .feature {
+    flex: 1;
+    max-width: 300px;
+    height: 200px;
+    background: white;
+    padding: 3rem 1.5rem;
     text-align: center;
+    border-radius: 20%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 3px solid teal;
+    margin:10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /*text-align: center;
     max-width: 800px;
     background-color: white;
     border: 3px solid teal;
     border-radius: 8px;
     padding: 8px;
-    margin: 10px;
+    margin: 10px;*/
+}
+.features-heading {
+    font-weight: bold;
+    text-align: center;
+    font-size: 32px;
+    color: rgb(50, 117, 117);
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display:block;
+    position:relative;
+}
+.feature::before{
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 36px;
+    display: block;
+    margin-bottom: 10px;
+    content:"";
+}
+.feature.service::before {
+    content: "\f002";
+    color: rgb(62, 112, 112);
+}
+
+.feature.hustle::before {
+    content: "\f0a1";
+    color: rgb(61, 112, 112);
+}
+
+.feature.connect::before {
+    content: "\f2b5";
+    color: rgb(61, 112, 112);
 }
 
 .feature h3 {
     margin-top: 10px;
-    font-size: 18px;
+    font-size: 22px;
     color: teal;
+    margin-bottom: 8px;
+}
+.feature p {
+    color: #64748b;
+    font-size: 14px;
 }
 
+/*===============Services=========================*/
 .services {
     padding: 20px;
     text-align: center;
@@ -187,8 +278,15 @@ header h1 {
 }
 
 .services h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 32px;
+    color: rgb(50, 117, 117);
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display:block;
+    position:relative;
 }
 
 .cards {
@@ -205,15 +303,20 @@ header h1 {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    color: white;
+    color: whitesmoke;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     background-size: cover;
     background-position: center;
 }
-
-
+.card:hover {
+    transform: translateY(-5px);
+}
+.card h4 {
+    margin-top: 10px;
+    font-size: 18px;
+}
 
 .tutoring {
     background-image: url('https://images.squarespace-cdn.com/content/v1/5cd9c98b0490791c5de0b3ae/1585198015819-1GIW0KQA2TQ4DMI0MZQK/Smart+Schools+Adult+High+School+Diploma+Program+School+Counselors');
@@ -235,11 +338,6 @@ header h1 {
     background-image: url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9');
 }
 
-.card h4 {
-    margin-top: 10px;
-    font-size: 18px;
-}
-
 /*.footer-banner {
       background: linear-gradient(to right, rgba(0, 128, 128, 0.863), #0092ccd8);
       color: white;
@@ -252,7 +350,7 @@ header h1 {
     
 
 .footer-banner {
-    background: linear-gradient(to right, rgba(0, 128, 128, 0.863), #0092ccd8);
+    background: linear-gradient(to right, rgba(36, 139, 139, 0.863), #1b82aad8);
     color: white;
     text-align: center;
     padding: 15px 10px;
@@ -275,7 +373,7 @@ header h1 {
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    background-color: #22c55e;
+    background-color: #134b4d;
     color: white;
 }
 
@@ -293,9 +391,52 @@ header h1 {
     font-size: 13px;
     margin-bottom: 8px;
 }
+.get-started-btn {
+    background: transparent;
+    color: #1a3a5f;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 40px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: 0.2s;
+}
+
+.get-started-btn:hover {
+    background: white;
+    color: #1a3a5f;
+    transform: scale(1.02);
+}
+
+.footer-divider {
+    margin: 5px 0;
+    border: none;
+    height: 1px;
+    background: #3a6a9a;
+}
+
+.help-btn {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 0.7rem 1.8rem;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: 0.2s;
+}
+
+.help-btn:hover {
+    background: white;
+    color: #1a3a5f;
+}
 
 .social-icons {
-    text-align: center;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
 }
 
 .social-icons a {
@@ -304,6 +445,8 @@ header h1 {
     height: 24px;
     margin: 0 8px;
     background-size: cover;
+    border-radius: 50%;
+    font-weight: bold;
     transition: transform 0.2s ease;
 }
 
