@@ -436,3 +436,293 @@ document.addEventListener("DOMContentLoaded", () => {
     setupEventListeners();
     setupCategoryFilters();
 });
+
+// ──────────────────────────────────────────────
+//  PROVIDERS DATA
+// ──────────────────────────────────────────────
+const PROVIDERS = [
+  { id:1,  fullname:"Thabo",    surname:"Mokoena",  servicetype:"Tutoring",       category:"tutoring",    rating:4.9, reviews:47, experience:"3 years", campus:"APB",           price:120, about:"Final-year BSc Mathematics student with a passion for breaking down complex concepts. I've helped over 40 students pass their exams with personalised study plans.", tags:["Maths","Statistics","Calculus"],        available:true,  avatar:"TM" },
+  { id:2,  fullname:"Lerato",   surname:"Dlamini",  servicetype:"Tutoring",       category:"tutoring",    rating:4.8, reviews:32, experience:"2 years", campus:"Kingsway",      price:100, about:"English and Communications tutor who helps students craft compelling essays, improve academic writing, and prepare for oral presentations.", tags:["English","Writing","Communications"],   available:true,  avatar:"LD" },
+  { id:3,  fullname:"Sipho",    surname:"Nkosi",    servicetype:"Photography",    category:"photography", rating:4.7, reviews:28, experience:"4 years", campus:"Doornfontein",  price:350, about:"Professional-grade photography for graduations, events, headshots, and content creation. Studio lighting to your location. Delivery within 48 hours.", tags:["Portraits","Events","Editing"],         available:true,  avatar:"SN" },
+  { id:4,  fullname:"Aisha",    surname:"Patel",    servicetype:"Graphic Design", category:"design",      rating:5.0, reviews:19, experience:"2 years", campus:"APB",           price:250, about:"Creative designer specialising in brand identity, social media graphics, and event flyers. Uses Figma and Adobe Suite to deliver stunning, print-ready designs.", tags:["Logos","Flyers","Branding"],            available:true,  avatar:"AP" },
+  { id:5,  fullname:"Zanele",   surname:"Khumalo",  servicetype:"Hair & Beauty",  category:"beauty",      rating:4.9, reviews:61, experience:"5 years", campus:"Soweto",        price:180, about:"Certified hair stylist offering braids, weaves, natural hair care, and makeup for events. I come to you or we can meet at my campus studio.", tags:["Braids","Natural Hair","Makeup"],       available:true,  avatar:"ZK" },
+  { id:6,  fullname:"Kagiso",   surname:"Sithole",  servicetype:"Web Development",category:"webdev",      rating:4.6, reviews:14, experience:"2 years", campus:"Kingsway",      price:500, about:"Full-stack developer who builds clean, modern websites for student projects, small businesses, and portfolios. React, Node.js, and MongoDB specialist.", tags:["React","Node.js","Websites"],           available:true,  avatar:"KS" },
+  { id:7,  fullname:"Nomsa",    surname:"Mahlangu", servicetype:"Fitness Training",category:"fitness",    rating:4.8, reviews:23, experience:"3 years", campus:"APB",           price:150, about:"Certified personal trainer and nutrition coach. I offer 1-on-1 sessions at campus gym or outdoor training. Specialising in weight loss and muscle building.", tags:["Gym","Nutrition","Cardio"],             available:true,  avatar:"NM" },
+  { id:8,  fullname:"Riyaad",   surname:"Adams",    servicetype:"IT Support",     category:"it",          rating:4.7, reviews:39, experience:"2 years", campus:"Doornfontein",  price:80,  about:"Quick and reliable tech support: laptop repairs, virus removal, software installation, WiFi issues, and data recovery. Most problems solved same day.", tags:["Repairs","Software","Data Recovery"],  available:true,  avatar:"RA" },
+  { id:9,  fullname:"Precious", surname:"Moyo",     servicetype:"Music Lessons",  category:"music",       rating:4.9, reviews:17, experience:"6 years", campus:"Kingsway",      price:200, about:"Music graduate offering piano and guitar lessons for beginners to intermediate students. Also teaches music theory, sight-reading, and exam preparation.", tags:["Piano","Guitar","Theory"],              available:true,  avatar:"PM" },
+  { id:10, fullname:"Bongani",  surname:"Zulu",     servicetype:"Photography",    category:"photography", rating:4.5, reviews:11, experience:"1 year",  campus:"Soweto",        price:200, about:"Student photographer passionate about documentary-style photography and video content. Great for campus events and social media reels.", tags:["Video","Events","Social Media"],       available:false, avatar:"BZ" },
+  { id:11, fullname:"Fatima",   surname:"Osman",    servicetype:"Tutoring",       category:"tutoring",    rating:4.7, reviews:26, experience:"2 years", campus:"APB",           price:110, about:"Accounting and Finance tutor helping students understand financial statements, cost accounting, and exam technique. Clear explanations, real exam examples.", tags:["Accounting","Finance","Tax"],           available:true,  avatar:"FO" },
+  { id:12, fullname:"Thandeka", surname:"Ntuli",    servicetype:"Graphic Design", category:"design",      rating:4.6, reviews:8,  experience:"1 year",  campus:"Doornfontein",  price:180, about:"Motion graphics and illustration specialist. I create animated social media content, infographics, and presentation templates that stand out.", tags:["Motion","Illustration","Presentations"],available:true, avatar:"TN" }
+];
+
+// ──────────────────────────────────────────────
+//  COOKIE MANAGER
+// ──────────────────────────────────────────────
+const CookieManager = {
+  hasConsented() { return localStorage.getItem('cc_consent') === 'accepted'; },
+  acceptCookies() { localStorage.setItem('cc_consent','accepted'); document.getElementById('cookie-banner').classList.add('hidden'); },
+  declineCookies() { localStorage.setItem('cc_consent','declined'); document.getElementById('cookie-banner').classList.add('hidden'); },
+  trackView(cat) {
+    if (!this.hasConsented() || !cat) return;
+    const h = this.getHistory();
+    h[cat] = (h[cat] || 0) + 1;
+    localStorage.setItem('cc_history', JSON.stringify(h));
+  },
+  trackProvider(id) {
+    if (!this.hasConsented()) return;
+    const v = this.getViewed();
+    if (!v.includes(id)) v.unshift(id);
+    localStorage.setItem('cc_viewed', JSON.stringify(v.slice(0,30)));
+    const p = PROVIDERS.find(x => x.id === id);
+    if (p) this.trackView(p.category);
+  },
+  getHistory() { try { return JSON.parse(localStorage.getItem('cc_history')||'{}'); } catch { return {}; } },
+  getViewed()  { try { return JSON.parse(localStorage.getItem('cc_viewed') ||'[]'); } catch { return []; } }
+};
+
+// ──────────────────────────────────────────────
+//  STATE
+// ──────────────────────────────────────────────
+let activeCat    = 'all';
+let ddItems      = [];
+let ddIdx        = -1;
+let favourites   = [];
+
+// ──────────────────────────────────────────────
+//  INIT
+// ──────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  if (CookieManager.hasConsented() || localStorage.getItem('cc_consent') === 'declined')
+    document.getElementById('cookie-banner').classList.add('hidden');
+  try { favourites = JSON.parse(localStorage.getItem('cc_favs') || '[]'); } catch {}
+  applyFilters();
+  document.addEventListener('click', e => {
+    if (!document.getElementById('searchRow').contains(e.target)) closeDD();
+  });
+});
+
+// ──────────────────────────────────────────────
+//  SEARCH LIVE
+// ──────────────────────────────────────────────
+function onLiveSearch(val) {
+  const q = val.trim().toLowerCase();
+  const dd = document.getElementById('searchDropdown');
+  if (!q) { closeDD(); applyFilters(); return; }
+
+  ddItems = PROVIDERS.filter(p =>
+    `${p.fullname} ${p.surname} ${p.servicetype} ${p.campus} ${p.tags.join(' ')}`.toLowerCase().includes(q)
+  ).slice(0, 6);
+  ddIdx = -1;
+
+  if (ddItems.length === 0) {
+    dd.innerHTML = `<div class="dd-empty"><i class="fas fa-search-minus" style="display:block;margin-bottom:6px;opacity:.4"></i>No results for "<strong>${esc(val)}</strong>"</div>`;
+  } else {
+    dd.innerHTML = ddItems.map((p, i) => `
+      <div class="dd-item" id="dd-${i}" onclick="pickDD(${i})">
+        <div class="dd-avatar">${p.avatar}</div>
+        <div class="dd-info">
+          <h5>${esc(p.fullname)} ${esc(p.surname)}</h5>
+          <span>${esc(p.servicetype)} · ${esc(p.campus)}</span>
+        </div>
+        <span class="dd-rating">⭐ ${p.rating}</span>
+      </div>
+    `).join('');
+  }
+  dd.classList.add('open');
+  applyFilters(); // update grid in background
+}
+
+function pickDD(i) {
+  const p = ddItems[i];
+  if (!p) return;
+  closeDD();
+  openModal(p.id);
+}
+function closeDD() { document.getElementById('searchDropdown').classList.remove('open'); ddIdx = -1; }
+
+function handleKey(e) {
+  const dd = document.getElementById('searchDropdown');
+  if (!dd.classList.contains('open')) return;
+  if (e.key === 'ArrowDown')  { ddIdx = Math.min(ddIdx+1, ddItems.length-1); highlightDD(); }
+  else if (e.key === 'ArrowUp')   { ddIdx = Math.max(ddIdx-1, -1); highlightDD(); }
+  else if (e.key === 'Enter')     { if (ddIdx >= 0) pickDD(ddIdx); else closeDD(); }
+  else if (e.key === 'Escape')    { closeDD(); }
+}
+function highlightDD() {
+  document.querySelectorAll('.dd-item').forEach((el,i) => { el.style.background = i===ddIdx ? 'var(--card2)':''; });
+}
+
+// ──────────────────────────────────────────────
+//  CHIPS
+// ──────────────────────────────────────────────
+function setChip(el, cat) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  activeCat = cat;
+  CookieManager.trackView(cat === 'all' ? null : cat);
+  applyFilters();
+}
+
+// ──────────────────────────────────────────────
+//  FILTER + SORT + RENDER
+// ──────────────────────────────────────────────
+function applyFilters() {
+  const q      = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+  const campus = document.getElementById('campusFilter')?.value || '';
+  const price  = document.getElementById('priceFilter')?.value  || '';
+  const sort   = document.getElementById('sortSelect')?.value   || 'rating';
+
+  let results = [...PROVIDERS];
+
+  if (activeCat !== 'all') results = results.filter(p => p.category === activeCat);
+
+  if (q) results = results.filter(p =>
+    `${p.fullname} ${p.surname} ${p.servicetype} ${p.campus} ${p.tags.join(' ')}`.toLowerCase().includes(q)
+  );
+
+  if (campus) results = results.filter(p => p.campus === campus);
+
+  if (price) {
+    if (price === '0-100')    results = results.filter(p => p.price < 100);
+    if (price === '100-300')  results = results.filter(p => p.price >= 100 && p.price <= 300);
+    if (price === '300-500')  results = results.filter(p => p.price > 300 && p.price <= 500);
+    if (price === '500+')     results = results.filter(p => p.price > 500);
+  }
+
+  if (sort === 'rating')     results.sort((a,b) => b.rating - a.rating);
+  if (sort === 'price-low')  results.sort((a,b) => a.price  - b.price);
+  if (sort === 'price-high') results.sort((a,b) => b.price  - a.price);
+  if (sort === 'name')       results.sort((a,b) => a.fullname.localeCompare(b.fullname));
+
+  renderGrid(results);
+}
+
+function renderGrid(list) {
+  const grid  = document.getElementById('servicesGrid');
+  const count = document.getElementById('resultsCount');
+  count.innerHTML = `Showing <strong>${list.length}</strong> service${list.length !== 1 ? 's' : ''}`;
+
+  if (list.length === 0) {
+    grid.innerHTML = `
+      <div class="no-results">
+        <i class="fas fa-search-minus"></i>
+        <h3>No services match your search</h3>
+        <p>Try adjusting your filters or search terms</p>
+        <button onclick="resetAll()">Clear All Filters</button>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(p => `
+    <div class="service-card" onclick="openModal(${p.id})">
+      <span class="card-avail ${p.available ? 'avail-yes' : 'avail-no'}">${p.available ? 'Available' : 'Busy'}</span>
+      <div class="card-top">
+        <div class="card-avatar">${p.avatar}</div>
+        <div class="card-header-info">
+          <h4>${esc(p.fullname)} ${esc(p.surname)}</h4>
+          <span class="card-service-type">${esc(p.servicetype)}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-rating">
+          <i class="fas fa-star"></i>
+          <strong>${p.rating}</strong>
+          <span>(${p.reviews} reviews)</span>
+        </div>
+        <div class="card-meta">
+          <span class="meta-item"><i class="fas fa-map-marker-alt"></i>${esc(p.campus)}</span>
+          <span class="meta-item"><i class="fas fa-clock"></i>${esc(p.experience)}</span>
+        </div>
+        <div class="card-tags">
+          ${p.tags.map(t => `<span class="card-tag">${esc(t)}</span>`).join('')}
+        </div>
+        <div class="card-price">R${p.price} <span>/ session</span></div>
+        <button class="btn-view" onclick="event.stopPropagation(); openModal(${p.id})">
+          <i class="fas fa-eye"></i> View Profile
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function resetAll() {
+  document.getElementById('searchInput').value  = '';
+  document.getElementById('campusFilter').value = '';
+  document.getElementById('priceFilter').value  = '';
+  document.getElementById('sortSelect').value   = 'rating';
+  activeCat = 'all';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('[data-cat="all"]').classList.add('active');
+  closeDD();
+  applyFilters();
+}
+
+// ──────────────────────────────────────────────
+//  MODAL
+// ──────────────────────────────────────────────
+function openModal(id) {
+  const p = PROVIDERS.find(x => x.id === id);
+  if (!p) return;
+  CookieManager.trackProvider(id);
+
+  const stars  = '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '½' : '');
+  const isFav  = favourites.includes(id);
+
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-avatar">${p.avatar}</div>
+    <h2 class="modal-name">${esc(p.fullname)} ${esc(p.surname)}</h2>
+    <span class="modal-svc">${esc(p.servicetype)}</span>
+    <div class="modal-campus"><i class="fas fa-map-marker-alt"></i> ${esc(p.campus)} Campus</div>
+    <div class="modal-grid">
+      <div class="mib"><label>RATING</label><span class="stars">${stars}</span><span>${p.rating}/5 · ${p.reviews} reviews</span></div>
+      <div class="mib"><label>EXPERIENCE</label><span>${esc(p.experience)}</span></div>
+      <div class="mib"><label>STARTING PRICE</label><span>R${p.price}/session</span></div>
+      <div class="mib"><label>STATUS</label><span style="color:${p.available?'var(--brand)':'var(--danger)'}">● ${p.available?'Available':'Busy'}</span></div>
+    </div>
+    <div class="modal-about-box">
+      <label>ABOUT</label>
+      <p>${esc(p.about)}</p>
+    </div>
+    <div class="modal-tags">${p.tags.map(t => `<span class="mtag">${esc(t)}</span>`).join('')}</div>
+    <div class="modal-actions">
+      <button class="btn-book" onclick="book(${p.id})"><i class="fas fa-calendar-plus"></i> Book Session</button>
+      <button class="btn-fav ${isFav?'active':''}" id="fav-${p.id}" onclick="toggleFav(${p.id})"><i class="fas fa-heart"></i></button>
+    </div>
+  `;
+  document.getElementById('serviceModal').classList.add('open');
+}
+function closeModal() { document.getElementById('serviceModal').classList.remove('open'); }
+function onBackdrop(e) { if (e.target === document.getElementById('serviceModal')) closeModal(); }
+
+function book(id) {
+  const p = PROVIDERS.find(x => x.id === id);
+  if (!p) return;
+  if (!p.available) { toast(`${p.fullname} is currently busy. Try again later.`,'warning'); return; }
+  toast(`Booking request sent to ${p.fullname}! ✅`);
+  closeModal();
+}
+
+function toggleFav(id) {
+  const i = favourites.indexOf(id);
+  if (i === -1) favourites.push(id); else favourites.splice(i,1);
+  localStorage.setItem('cc_favs', JSON.stringify(favourites));
+  const btn = document.getElementById(`fav-${id}`);
+  if (btn) btn.classList.toggle('active', favourites.includes(id));
+}
+
+// ──────────────────────────────────────────────
+//  UTIL
+// ──────────────────────────────────────────────
+function esc(s) {
+  if (!s && s !== 0) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function toast(msg, type='success') {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:${type==='warning'?'#f59e0b':'var(--brand)'};color:#fff;padding:12px 24px;border-radius:10px;font-size:.88rem;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:all .3s;opacity:0;white-space:nowrap;`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(() => { t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)'; });
+  setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 3000);
+}
